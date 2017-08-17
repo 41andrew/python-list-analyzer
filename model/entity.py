@@ -1,4 +1,4 @@
-class Company:
+class Entity:
     """
     Class used to represent company entity
 
