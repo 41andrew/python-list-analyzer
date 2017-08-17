@@ -32,13 +32,11 @@ class MainApplication(tk.Frame):
         self.hi_there.grid(row=1)
 
         # Przycisk scieżki
-        self.inputBtn = tk.Button(self, text="Kliknij, aby wskazać ścieżkę do pliku .csv", command=self.load_input,
-                                  bg="black")
+        self.inputBtn = tk.Button(self, text="Kliknij, aby wskazać ścieżkę do pliku .csv", command=self.load_input)
         self.inputBtn.grid(row=2)
 
         # Przycisk scieżki
-        self.inputBtn = tk.Button(self, text="Kliknij, aby dodać engagementy", command=self.load_eng,
-                                  bg="black")
+        self.inputBtn = tk.Button(self, text="Kliknij, aby dodać engagementy", command=self.load_eng)
         self.inputBtn.grid(row=3)
 
         # Quit button - color change doesn't work on MacOS
