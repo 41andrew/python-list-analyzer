@@ -3,13 +3,19 @@ class BusinessDevelopmentActivities:
     Class used to represent company entity
 
     Attributes:
-        nip(str):
-        national_account(str):
-        entity_name(str):
-        description(str):
+        company(Company):
+        id(str):
+        subject(str):
+        details(str):
+        activity_date(str):
+        contact(str):
+        category(str):
     """
-    def __init__(self, nip, national_account, entity_name, description):
-        self.nip = nip
-        self.national_account = national_account
-        self.entity_name = entity_name
-        self.description = description
+    def __init__(self, company, id, subject, details, activity_date, contact, category):
+        self.company = company
+        self.id = id
+        self.subject = subject
+        self.details = details
+        self.activity_date = activity_date
+        self.contact = contact
+        self.category = category
