@@ -13,3 +13,6 @@ class Company:
         self.national_account = national_account
         self.entity_name = entity_name
         self.description = description
+
+    def __str__(self):
+        return "[{0.nip}][{0.national_account}][{0.entity_name}][{0.description}]".format(self)

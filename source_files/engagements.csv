@@ -1,0 +1,6 @@
+1111111111;Grupa Test sp. zoo;Test sp. zoo;audit restricted client - PL SLP assigned;XXXXX1;bez znaczenia;Jan Kowalski;21-02-2015;Active
+1111111111;Grupa Test sp. zoo;Test sp. zoo;autoapproval;XXXXX2;bez znaczenia;Jan Kowalski;21-02-2015;Locked
+1111111111;Grupa Test sp. zoo;Test sp. zoo;non-audit client / PL SLP;XXXXX3;bez znaczenia;Jan Kowalski;21-02-2015;Non-Active
+1111111111;Grupa Test sp. zoo;Test spolka corka;non-audit client / PL SLP;XXXXX4;bez znaczenia;Jan Kowalski;21-02-2015;Non-Active
+1111111111;Grupa Test sp. zoo;Test spolka corka;Audit Target;XXXXX5;bez znaczenia;Jan Kowalski;21-02-2015;Non-Active
+2222222222;none;Spółka 1;audit restricted client - PL Secondary approval;XXXXX6;bez znaczenia;Jan Kowalski;21-02-2015;Active

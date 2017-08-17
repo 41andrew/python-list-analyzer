@@ -20,3 +20,7 @@ class Engagement:
         self.engagement_partner = engagement_partner
         self.create_date = create_date
         self.status = status
+
+    def __str__(self):
+        return "{0.company}][{0.engagement_code}][{0.engagement_name}][{0.engagement_partner}]"\
+            "[{0.create_date}][{0.status}]".format(self)
