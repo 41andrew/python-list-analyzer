@@ -10,19 +10,19 @@ class CsvDataLoader:
     Class used to load data from input .csv files
 
     Attributes:
-        default_input_files_directory(str): default directory where input files are stored
-        default_data_paths(dict): default locations of input files
+        input_files_directory(str): default directory where input files are stored
+        data_paths(dict): default locations of input files
         input_entities(dict): dictionary of input entities, with nip as keys
     """
 
     def __init__(self):
-        self.default_input_files_directory = "source_files"
-        self.default_data_paths = {
-            'input_file_source': "{}/input.csv".format(self.default_input_files_directory),
-            'input_file_crm_names': "{}/company_names.csv".format(self.default_input_files_directory),
-            'input_file_engagements': "{}/engagements.csv".format(self.default_input_files_directory),
-            'input_file_proposals': "{}/proposals.csv".format(self.default_input_files_directory),
-            'input_file_bda': "{}/bda.csv".format(self.default_input_files_directory)
+        self.input_files_directory = "source_files"
+        self.data_paths = {
+            'input_file_source': "{}/input.csv".format(self.input_files_directory),
+            'input_file_crm_names': "{}/company_names.csv".format(self.input_files_directory),
+            'input_file_engagements': "{}/engagements.csv".format(self.input_files_directory),
+            'input_file_proposals': "{}/proposals.csv".format(self.input_files_directory),
+            'input_file_bda': "{}/bda.csv".format(self.input_files_directory)
         }
         self.input_entities = {}
 
@@ -50,7 +50,7 @@ class CsvDataLoader:
         :return: None
         """
 
-        with open(self.default_data_paths['input_file_source'], 'r', encoding='utf8') as source_file:
+        with open(self.data_paths['input_file_source'], 'r', encoding='utf8') as source_file:
             for line in source_file.readlines():
                 input_entity_data = line.strip('\n').split(sep=';')
                 input_entity = InputEntity(input_entity_data[0],
@@ -65,7 +65,7 @@ class CsvDataLoader:
         :return: None
         """
 
-        with open(self.default_data_paths['input_file_engagements'], 'r', encoding='utf8') as source_file:
+        with open(self.data_paths['input_file_engagements'], 'r', encoding='utf8') as source_file:
             for line in source_file.readlines():
                 engagements_data = line.strip('\n').split(sep=';')
                 entity = Entity(engagements_data[0], engagements_data[1],
@@ -81,7 +81,7 @@ class CsvDataLoader:
             :return: None
         """
 
-        with open(self.default_data_paths['input_file_proposals'], 'r', encoding='utf8') as source_file:
+        with open(self.data_paths['input_file_proposals'], 'r', encoding='utf8') as source_file:
             for line in source_file.readlines():
                 proposal_data = line.strip('\n').split(sep=';')
                 entity = Entity(proposal_data[0], proposal_data[1],
@@ -97,7 +97,7 @@ class CsvDataLoader:
             :return: None
         """
 
-        with open(self.default_data_paths['input_file_bda'], 'r', encoding='utf8') as source_file:
+        with open(self.data_paths['input_file_bda'], 'r', encoding='utf8') as source_file:
             for line in source_file.readlines():
                 bda_data = line.strip('\n').split(sep=';')
                 entity = Entity(bda_data[0], bda_data[1],
