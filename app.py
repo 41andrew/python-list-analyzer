@@ -3,7 +3,7 @@ from data_loader.data_loader import CsvDataLoader
 # Check if this is a main thread
 if __name__ == "__main__":
     data_loader = CsvDataLoader()
-    data_loader.read_from_input_csv_files()
+    data_loader.load_data()
 
     # Test if data is loaded
     for nip in data_loader.input_entities:
