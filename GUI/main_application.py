@@ -19,11 +19,14 @@ class ChooseSourceFilesFrame(tk.Frame):
                                       command=lambda: self.change_input_file('bda'))
         self.prop_file_btn = tk.Button(parent, text="Choose proposals file", width=30,
                                        command=lambda: self.change_input_file('prop'))
+        self.crm_file_btn = tk.Button(parent, text="Choose file with CRM entity names", width=30,
+                                      command=lambda: self.change_input_file('crm'))
 
         self.input_file_lbl = tk.Label(parent, pady=10)
         self.eng_file_lbl = tk.Label(parent, pady=10)
         self.bda_file_lbl = tk.Label(parent, pady=10)
         self.prop_file_lbl = tk.Label(parent, pady=10)
+        self.crm_file_lbl = tk.Label(parent, pady=10)
 
         self.set_widgets_position()
 
@@ -40,6 +43,9 @@ class ChooseSourceFilesFrame(tk.Frame):
         self.prop_file_btn.grid(row=6)
         self.prop_file_lbl.grid(row=7)
 
+        self.crm_file_btn.grid(row=8)
+        self.crm_file_lbl.grid(row=9)
+
     def change_label_text(self, label_name, new_text):
         if label_name == "input":
             self.input_file_lbl['text'] = new_text
@@ -49,6 +55,9 @@ class ChooseSourceFilesFrame(tk.Frame):
             self.bda_file_lbl['text'] = new_text
         elif label_name == "prop":
             self.prop_file_lbl['text'] = new_text
+        elif label_name == "crm":
+            self.crm_file_lbl['text'] = new_text
+            pass
 
     def pass_new_path_to_parent(self, path_name, path_value):
         self.parent.change_path_in_data_loader(path_name, path_value)
@@ -91,6 +100,9 @@ class MainApplication(tk.Frame):
             self.data_loader.data_paths['input_file_bda'] = path_value
         elif path_key == "prop":
             self.data_loader.data_paths['input_file_proposals'] = path_value
+        elif path_key == "crm":
+            # TODO - not yet implemented
+            pass
 
 
 def center_window_on_the_screen(window, width, height):
