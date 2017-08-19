@@ -1,12 +1,9 @@
 class Engagement:
-
-
-
     """
-    Class used to represent engagement between capital group and particular company
+    Class used to represent row from file with Engagements
 
     Attributes:
-        entity(Entity):
+        entity(Entity): object of Entity class composed in this row
         engagement_code(str):
         engagement_name(str):
         engagement_partner(str):

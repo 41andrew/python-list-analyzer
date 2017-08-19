@@ -4,7 +4,7 @@ from calculations.strategy import EngagementStrategy
 
 class InputRow:
     """
-        Class used to represent input data
+        Class used to represent input data, which category will be assigned
 
     Attributes:
         name(str): entity name

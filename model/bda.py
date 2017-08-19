@@ -1,9 +1,9 @@
 class BusinessDevelopmentActivities:
     """
-    Class used to represent company entity
+    Class used to represent row from file with Business Development Activities
 
     Attributes:
-        entity(Company):
+        entity(Entity): object of Entity class composed in this row
         bda_id(str):
         subject(str):
         details(str):

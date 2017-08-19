@@ -2,7 +2,7 @@ from model.input_row import InputRow
 from model.engagement import Engagement
 from model.entity import Entity
 from model.proposal import Proposal
-from model.business_development_activities import BusinessDevelopmentActivities
+from model.bda import BusinessDevelopmentActivities
 
 
 class CsvDataLoader:

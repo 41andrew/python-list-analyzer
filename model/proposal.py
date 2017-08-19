@@ -1,6 +1,6 @@
 class Proposal:
     """
-    Class used to represent proposal entity
+    Class used to represent proposal row from file with Proposals
     Attributes:
         entity(Entity): company nip
         proposal_id(str): company nip
