@@ -13,6 +13,7 @@ class CsvDataLoader:
         input_files_directory(str): default directory where input files are stored
         data_paths(dict): locations of input files
         input_entities(dict): dictionary of input entities, with nip as keys
+        error_messages(set(list(str)): if data loading gone wrong, error messages will be stored in this set
     """
 
     def __init__(self):
@@ -29,16 +30,19 @@ class CsvDataLoader:
 
     def load_data(self):
         """
-        Method responsible for loading data from all input csv files
+            Method responsible for loading data from all input csv files step by step
+            The only one 'public' method available from outside
+            After loading, data will be in input_entities dict
         """
 
-        self.add_input_entities()
-        self.add_crm_names_to_corresponding_input_entities()
-        self.add_engagements_to_corresponding_input_entities()
-        self.add_proposals_to_corresponding_input_entities()
-        self.add_bda_to_corresponding_input_entities()
+        self.error_messages = set([])
+        self._add_input_rows_to_dict()
+        self._add_crm_names_to_input_rows()
+        self._add_engagements_to_corresponding_input_row()
+        self._add_proposals_to_corresponding_input_row()
+        self._add_bda_to_corresponding_input_row()
 
-    def read_lines_from_file(self, file_path_key):
+    def _read_lines_from_file(self, file_path_key):
         """
         Method read all lines from file under given path
 
@@ -54,61 +58,64 @@ class CsvDataLoader:
             self.error_messages.add("File {} not found".format(file_path_key))
             return None
 
-    def add_input_entities(self):
+    def _add_input_rows_to_dict(self):
         """
-        Method adds input entities to dict
+        Method adds input rows to dict
 
         :return: None
         """
 
         file_path_key_in_dict = "input_file_source"
 
-        for line in self.read_lines_from_file(file_path_key_in_dict):
-            input_entity = self.parse_object_from_semicolon_separated_line(line, file_path_key_in_dict)
+        for line in self._read_lines_from_file(file_path_key_in_dict):
+            input_entity = self._parse_object_from_semicolon_separated_line(line, file_path_key_in_dict)
             self.input_entities[input_entity.nip] = input_entity
 
-    def add_engagements_to_corresponding_input_entities(self):
+    def _add_engagements_to_corresponding_input_row(self):
         """
-        Method responsible for adding engagements to its input entity collection
+        Method responsible for adding engagements to input row engagements collection, for input row
+        with same NIP as engagement
 
         :return: None
         """
 
         file_path_key_in_dict = "input_file_engagements"
 
-        for line in self.read_lines_from_file(file_path_key_in_dict):
-            engagement = self.parse_object_from_semicolon_separated_line(line, file_path_key_in_dict)
-            self.add_element_to_entity_collection(engagement, "engagements")
+        for line in self._read_lines_from_file(file_path_key_in_dict):
+            engagement = self._parse_object_from_semicolon_separated_line(line, file_path_key_in_dict)
+            self._add_element_to_input_row_collection(engagement, "engagements")
 
-    def add_proposals_to_corresponding_input_entities(self):
+    def _add_proposals_to_corresponding_input_row(self):
         """
-        Method responsible for adding proposals to its input entity collection
+        Method responsible for adding proposals to input row proposals collection, for input row
+        with same NIP as proposal
 
             :return: None
         """
 
         file_path_key_in_dict = "input_file_proposals"
 
-        for line in self.read_lines_from_file(file_path_key_in_dict):
-            proposal = self.parse_object_from_semicolon_separated_line(line, file_path_key_in_dict)
-            self.add_element_to_entity_collection(proposal, "proposals")
+        for line in self._read_lines_from_file(file_path_key_in_dict):
+            proposal = self._parse_object_from_semicolon_separated_line(line, file_path_key_in_dict)
+            self._add_element_to_input_row_collection(proposal, "proposals")
 
-    def add_bda_to_corresponding_input_entities(self):
+    def _add_bda_to_corresponding_input_row(self):
         """
-        Method responsible for loading data from input_file_bda
+        Method responsible for adding bda to input row bda collection, for input row
+        with same NIP as bda
 
             :return: None
         """
 
         file_path_key_in_dict = "input_file_bda"
 
-        for line in self.read_lines_from_file(file_path_key_in_dict):
-            bda = self.parse_object_from_semicolon_separated_line(line, file_path_key_in_dict)
-            self.add_element_to_entity_collection(bda, "bda")
+        for line in self._read_lines_from_file(file_path_key_in_dict):
+            bda = self._parse_object_from_semicolon_separated_line(line, file_path_key_in_dict)
+            self._add_element_to_input_row_collection(bda, "bda")
 
-    def add_element_to_entity_collection(self, element, collection):
+    def _add_element_to_input_row_collection(self, element, collection):
         """
-        Method responsible for adding element to one of input entity lists,if it exists in dictionary
+        Method responsible for adding element to one of input row lists,if it exists in dictionary
 
         :param element: element to be added to particular collection
         :param(str) collection: 'engagements' or 'proposals' or 'bda'
@@ -123,11 +130,11 @@ class CsvDataLoader:
             elif collection == "bda":
                 self.input_entities[element.entity.nip].bda.append(element)
 
-    def add_crm_names_to_corresponding_input_entities(self):
+    def _add_crm_names_to_input_rows(self):
         # TODO implement this method
         pass
 
-    def parse_object_from_semicolon_separated_line(self, line, file_path_key_in_dict):
+    def _parse_object_from_semicolon_separated_line(self, line, file_path_key_in_dict):
         """
         Based on file_path_key_in_dict, different type of object is created
 
