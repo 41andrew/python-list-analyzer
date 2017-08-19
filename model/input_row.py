@@ -1,7 +1,8 @@
 from enum import Enum
+from calculations.strategy import EngagementStrategy
 
 
-class InputEntity:
+class InputRow:
     """
         Class used to represent input data
 
@@ -26,6 +27,12 @@ class InputEntity:
 
     def __str__(self):
         return "[{0.name}][{0.nip}][{0.category}][{0.company_name_in_crm}]".format(self)
+
+    def assign_category(self):
+        self.category = EngagementStrategy(self).assign_category()
+
+    def has_any_engagements(self):
+        return len(self.engagements) != 0
 
 
 class Category(Enum):

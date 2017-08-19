@@ -1,4 +1,7 @@
 class Engagement:
+
+
+
     """
     Class used to represent engagement between capital group and particular company
 
@@ -24,3 +27,6 @@ class Engagement:
     def __str__(self):
         return "[{0.entity}][{0.engagement_code}][{0.engagement_name}][{0.engagement_partner}]"\
             "[{0.create_date}][{0.status}]".format(self)
+
+    def is_active(self):
+        return self.status.upper() == "ACTIVE"

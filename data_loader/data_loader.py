@@ -1,4 +1,4 @@
-from model.input_entity import InputEntity
+from model.input_row import InputRow
 from model.engagement import Engagement
 from model.entity import Entity
 from model.proposal import Proposal
@@ -140,9 +140,9 @@ class CsvDataLoader:
         try:
             line = line.strip('\n').split(sep=';')
             if file_path_key_in_dict == "input_file_source":
-                input_entity = InputEntity(line[0],
-                                           line[1],
-                                           line[2])
+                input_entity = InputRow(line[0],
+                                        line[1],
+                                        line[2])
                 return input_entity
 
             else:
