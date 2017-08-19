@@ -1,4 +1,6 @@
 from data_loader.data_loader import CsvDataLoader
+from calculations.strategy import InputRowsCategoryAssignmentContext
+from calculations.strategy import EngagementStrategy
 
 
 def print_input_record(input_record):
@@ -20,10 +22,19 @@ def print_elements_in_collection(collection_name, collection):
 
 # Check if this is a main thread
 if __name__ == "__main__":
+    # Loading data from csv files
     data_loader = CsvDataLoader()
     data_loader.load_data()
+    
+    # Currently used strategy
+    strategy = EngagementStrategy()
+    
+    # Application main goal is to assign category for each company
+    context = InputRowsCategoryAssignmentContext(strategy, data_loader.input_entities)
 
     # Print loaded data
     for nip in data_loader.input_entities:
         print_input_record(data_loader.input_entities[nip])
 
+    # Assign categories
+    context.run_category_assignment()

@@ -1,42 +1,31 @@
-# from model.input_row import Category
+import abc
 
 
-class EngagementStrategy:
+class InputRowsCategoryAssignmentContext:
+    """
+    Base class responsible for category assignment
+    It takes strategy and produces result - all input rows will have category
+    It does not depend from algorithm - may accept different implementations
+    """
 
-    def __init__(self, input_row):
-        self.input_row = input_row
+    def __init__(self, strategy, rows):
+        self._strategy = strategy
+        self._input_rows = rows
 
-    def assign_category(self):
+    def run_category_assignment(self):
+        for row in self._input_rows:
+            print("ROW = {}".format(self._input_rows[row]))
+            self._strategy.assign_category(self._input_rows[row])
 
-        if self.input_row.has_any_engagements():
-            print("Input has engagements")
-            sample_engagement = self.input_row.engagements[0]
 
-            if EngagementStrategy.is_input_row_in_capital_group(sample_engagement):
-                # TODO harder case
-                print("Engagement is in capital group - to be implemented")
-            else:
-                print("Engagement is not in capital group")
+class CategoryAssignmentStrategy(metaclass=abc.ABCMeta):
+    """
+    Abstract strategy class
+    """
 
-                for engagement in self.input_row.engagements:
-
-                    if EngagementStrategy.is_input_row_restricted_by_description_or_status(engagement):
-                        # TODO Category 3
-                        print("Engagement is restricted - category 3")
-                        break
-                        # return Category.NOT_ACCEPTED
-
-                # TODO pass toProposalStrategy
-                print("Engagement is not restricted - go to proposal")
-                # self.input_row.category = Category.ACCEPTED
-                # self.input_row.category=   PrposalSrategry(self.input_row).ass
-                # return Category.ACCEPTED
-
-        else:
-            # TODO pass to ProposalStrategy
-            print("input has 0 engagements - go to proposal")
-            # print("Entity {} capital group {}".format(self.input_row, Category.ACCEPTED))
-            # return Category.ACCEPTED
+    @abc.abstractmethod
+    def assign_category(self, input_row):
+        pass
 
     @staticmethod
     def is_input_row_in_capital_group(engagement):
@@ -46,13 +35,105 @@ class EngagementStrategy:
     def is_input_row_restricted_by_description_or_status(engagement):
         return engagement.entity.is_restricted() or engagement.is_active()
 
+    @staticmethod
+    def end_of_calculation_if_row_not_in_capital_group(rows):
+
+        if CategoryAssignmentStrategy.is_any_company_restricted(rows):
+            # TODO assign category 3 here
+            # category is already assigned - no need to go deeper
+            return True
+        else:
+            print("Category 1 and go deper")
+            # TODO assing category 1 here
+            return False
+
+    def end_of_calculation_if_row_in_capital_group(self, rows, input_row):
+
+        output_category = self.is_any_company_restricted_and_its_same_company_as_checked(rows, input_row)
+
+        if output_category == 3:
+            # TODO assign category 3 here
+            return True
+        elif output_category == 2:
+            # TODO assign category 2 here
+            return False
+        elif output_category == 1:
+            # TODO assign category 1 here
+            return False
+
+    @staticmethod
+    def is_any_company_restricted(rows):
+        is_input_company_restricted = False
+
+        for row in rows:
+            if CategoryAssignmentStrategy.is_input_row_restricted_by_description_or_status(row):
+                print("Row with NIP [{}] is restricted - category 3".format(row.entity.nip))
+                is_input_company_restricted = True
+                break
+
+        return is_input_company_restricted
+
+    @staticmethod
+    def is_any_company_restricted_and_its_same_company_as_checked(rows, input_row):
+        """
+        Returns :
+        1 - none of the rows is restricted
+        2 - there was a restricted row BUT it was DIFFERENT company than input one
+        3 - there was a restricted row AND it was THE SAME company as input
+        """
+        any_company_restricted = False
+        restricted_company_is_same_as_input = False
+
+        for row in rows:
+            if CategoryAssignmentStrategy.is_input_row_restricted_by_description_or_status(row):
+                any_company_restricted = True
+
+                if input_row.is_entity_name_same_as_crm_name(row.entity.entity_name):
+                    print("There is a restricted company and it's same as input one - category 3")
+                    restricted_company_is_same_as_input = True
+
+                    return 3
+
+        if any_company_restricted and not restricted_company_is_same_as_input:
+            print("There was restricted company but different than input one - category 2, check further")
+            return 2
+        elif not any_company_restricted:
+            print("There wasn't any restricted company - category 1, check further")
+            return 1
 
 
+class EngagementStrategy(CategoryAssignmentStrategy):
+
+    def assign_category(self, input_row):
+
+        if input_row.has_any_engagements():
+            print("input_row with NIP [{}] has engagements - further check".format(input_row.nip))
+
+            # Each row in engagements file for same NIP has some value of national_account
+            sample_engagement = input_row.engagements[0]
+
+            if self.is_input_row_in_capital_group(sample_engagement):
+                print("Engagement is in capital group")
+
+                if self.end_of_calculation_if_row_in_capital_group(input_row.engagements, input_row):
+                    print("Category finally assigned in EngagementStrategy")
+                else:
+                    ProposalStrategy().assign_category(input_row)
+
+            else:
+                print("Engagement is not in capital group")
+
+                if self.end_of_calculation_if_row_not_in_capital_group(input_row.engagements):
+                    print("Category finally assigned in EngagementStrategy")
+                else:
+                    ProposalStrategy().assign_category(input_row)
+
+        else:
+            print("input_row with NIP [{}] has no engagements".format(input_row.nip))
+            ProposalStrategy().assign_category(input_row)
 
 
+class ProposalStrategy(CategoryAssignmentStrategy):
 
-# nation_account - same in 3
-# description - same in 2/3
-# status - diff eng and prop
-# entity_name - same in 2
-
+    def assign_category(self, input_row):
+        print("In ProposalStrategy - assign_category")

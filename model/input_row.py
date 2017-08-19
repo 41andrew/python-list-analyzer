@@ -34,6 +34,9 @@ class InputRow:
     def has_any_engagements(self):
         return len(self.engagements) != 0
 
+    def is_entity_name_same_as_crm_name(self, entity_name):
+        return entity_name.upper() == self.company_name_in_crm.upper()
+
 
 class Category(Enum):
 
