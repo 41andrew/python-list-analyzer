@@ -6,6 +6,7 @@ class InputRowsCategoryAssignmentContext:
     Base class responsible for category assignment
     It takes strategy and produces result - all input rows will have category
     It does not depend from algorithm - may accept different implementations
+    If in future algorithm will change - a different strategy will be passed
     """
 
     def __init__(self, strategy, rows):
@@ -28,12 +29,12 @@ class CategoryAssignmentStrategy(metaclass=abc.ABCMeta):
         pass
 
     @staticmethod
-    def is_input_row_in_capital_group(engagement):
-        return engagement.entity.is_in_capital_group()
+    def is_input_row_in_capital_group(model):
+        return model.entity.is_in_capital_group()
 
     @staticmethod
-    def is_input_row_restricted_by_description_or_status(engagement):
-        return engagement.entity.is_restricted() or engagement.is_active()
+    def is_input_row_restricted_by_description_or_status(model):
+        return model.entity.is_restricted() or model.is_active()
 
     @staticmethod
     def end_of_calculation_if_row_not_in_capital_group(rows):
@@ -43,8 +44,8 @@ class CategoryAssignmentStrategy(metaclass=abc.ABCMeta):
             # category is already assigned - no need to go deeper
             return True
         else:
-            print("Category 1 and go deper")
-            # TODO assing category 1 here
+            print("Category 1 and go deeper")
+            # TODO assign category 1 here
             return False
 
     def end_of_calculation_if_row_in_capital_group(self, rows, input_row):

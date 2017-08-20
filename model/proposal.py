@@ -22,3 +22,7 @@ class Proposal:
     def __str__(self):
         return "[{0.entity}][{0.proposal_id}][{0.proposal_name}][{0.proposal_partner}][{0.create_date}][{0.status}]"\
             .format(self)
+
+    def is_active(self):
+        # TODO to be implemented
+        pass
