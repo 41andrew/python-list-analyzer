@@ -11,6 +11,8 @@ class Proposal:
 
     """
 
+    proposal_restricted_status = ["Active", "Sold", "Sent", "New"]
+
     def __init__(self, entity, proposal_id, proposal_name, proposal_partner, create_date, status):
         self.entity = entity
         self.proposal_id = proposal_id
@@ -25,4 +27,5 @@ class Proposal:
 
     def is_active(self):
         # TODO to be implemented
-        pass
+        return self.status in Proposal.proposal_restricted_status
+        # pytanie - czy jest różnica pomiędzy self.proposal_restricted_status a Proposal.proposal_restricted_status?
