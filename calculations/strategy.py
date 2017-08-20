@@ -1,4 +1,5 @@
 import abc
+from model.input_row import Category
 
 
 class InputRowsCategoryAssignmentContext:
@@ -9,9 +10,9 @@ class InputRowsCategoryAssignmentContext:
     If in future algorithm will change - a different strategy will be passed
     """
 
-    def __init__(self, strategy, rows):
-        self._strategy = strategy
-        self._input_rows = rows
+    def __init__(self):
+        self._strategy = None
+        self._input_rows = None
 
     def run_category_assignment(self):
         for row in self._input_rows:
@@ -40,12 +41,10 @@ class CategoryAssignmentStrategy(metaclass=abc.ABCMeta):
     def end_of_calculation_if_row_not_in_capital_group(rows):
 
         if CategoryAssignmentStrategy.is_any_company_restricted(rows):
-            # TODO assign category 3 here
             # category is already assigned - no need to go deeper
             return True
         else:
             print("Category 1 and go deeper")
-            # TODO assign category 1 here
             return False
 
     def end_of_calculation_if_row_in_capital_group(self, rows, input_row):
@@ -53,13 +52,12 @@ class CategoryAssignmentStrategy(metaclass=abc.ABCMeta):
         output_category = self.is_any_company_restricted_and_its_same_company_as_checked(rows, input_row)
 
         if output_category == 3:
-            # TODO assign category 3 here
             return True
         elif output_category == 2:
-            # TODO assign category 2 here
+            input_row.category = Category.TO_CHECK
             return False
         elif output_category == 1:
-            # TODO assign category 1 here
+            input_row.category = Category.ACCEPTED
             return False
 
     @staticmethod
@@ -119,6 +117,7 @@ class EngagementStrategy(CategoryAssignmentStrategy):
                 if self.end_of_calculation_if_row_in_capital_group(input_row.engagements, input_row):
                     print("Category finally assigned in EngagementStrategy")
                 else:
+                    input_row.category = Category.ACCEPTED
                     ProposalStrategy().assign_category(input_row)
 
             else:
@@ -126,7 +125,9 @@ class EngagementStrategy(CategoryAssignmentStrategy):
 
                 if self.end_of_calculation_if_row_not_in_capital_group(input_row.engagements):
                     print("Category finally assigned in EngagementStrategy")
+                    input_row.category = Category.NOT_ACCEPTED
                 else:
+                    input_row.category = Category.ACCEPTED
                     ProposalStrategy().assign_category(input_row)
 
         else:

@@ -30,7 +30,9 @@ if __name__ == "__main__":
     strategy = EngagementStrategy()
     
     # Application main goal is to assign category for each company
-    context = InputRowsCategoryAssignmentContext(strategy, data_loader.input_entities)
+    context = InputRowsCategoryAssignmentContext()
+    context._strategy = strategy
+    context._input_rows = data_loader.input_entities
 
     # Print loaded data
     for nip in data_loader.input_entities:
