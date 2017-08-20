@@ -34,9 +34,11 @@ if __name__ == "__main__":
     context._strategy = strategy
     context._input_rows = data_loader.input_entities
 
+    # Assign categories
+    context.run_category_assignment()
+
     # Print loaded data
     for nip in data_loader.input_entities:
         print_input_record(data_loader.input_entities[nip])
 
-    # Assign categories
-    context.run_category_assignment()
+

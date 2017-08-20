@@ -26,6 +26,5 @@ class Proposal:
             .format(self)
 
     def is_active(self):
-        # TODO to be implemented
         return self.status in Proposal.proposal_restricted_status
         # pytanie - czy jest różnica pomiędzy self.proposal_restricted_status a Proposal.proposal_restricted_status?

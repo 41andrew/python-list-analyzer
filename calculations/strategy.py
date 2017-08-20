@@ -52,6 +52,7 @@ class CategoryAssignmentStrategy(metaclass=abc.ABCMeta):
         output_category = self.is_any_company_restricted_and_its_same_company_as_checked(rows, input_row)
 
         if output_category == 3:
+            input_row.category = Category.NOT_ACCEPTED
             return True
         elif output_category == 2:
             input_row.category = Category.TO_CHECK
@@ -117,7 +118,6 @@ class EngagementStrategy(CategoryAssignmentStrategy):
                 if self.end_of_calculation_if_row_in_capital_group(input_row.engagements, input_row):
                     print("Category finally assigned in EngagementStrategy")
                 else:
-                    input_row.category = Category.ACCEPTED
                     ProposalStrategy().assign_category(input_row)
 
             else:
@@ -137,5 +137,58 @@ class EngagementStrategy(CategoryAssignmentStrategy):
 
 class ProposalStrategy(CategoryAssignmentStrategy):
 
+    def end_of_calculation_if_row_in_capital_group(self, rows, input_row):
+
+        print("method end of in Proposal Strategy")
+        output_category = self.is_any_company_restricted_and_its_same_company_as_checked(rows, input_row)
+
+        if output_category == 3:
+            input_row.category = Category.NOT_ACCEPTED
+            return True
+        elif output_category == 2:
+            input_row.category = Category.TO_CHECK
+            return True
+        elif output_category == 1:
+            input_row.category = Category.ACCEPTED
+            return False
+
     def assign_category(self, input_row):
-        print("In ProposalStrategy - assign_category")
+
+        if input_row.has_any_proposals():
+            print("input_row with NIP [{}] has proposals - further check".format(input_row.nip))
+
+            # Each row in engagements file for same NIP has some value of national_account
+            sample_proposal = input_row.proposals[0]
+
+            if self.is_input_row_in_capital_group(sample_proposal):
+                print("Proposal is in capital group")
+
+                if self.end_of_calculation_if_row_in_capital_group(input_row.proposals, input_row):
+                    print("Category finally assigned in ProposalStrategy")
+                else:
+                    BDAStrategy().assign_category(input_row)
+
+            else:
+                print("Proposal is not in capital group")
+
+                if self.end_of_calculation_if_row_not_in_capital_group(input_row.proposals):
+                    print("Category finally assigned in ProposalStrategy")
+                    input_row.category = Category.NOT_ACCEPTED
+                else:
+                    input_row.category = Category.ACCEPTED
+                    BDAStrategy().assign_category(input_row)
+
+        else:
+            print("input_row with NIP [{}] has no proposals".format(input_row.nip))
+            BDAStrategy().assign_category(input_row)
+
+
+
+class BDAStrategy(CategoryAssignmentStrategy):
+
+    def assign_category(self, input_row):
+        print("Checking BDAs")
+
+        if input_row.has_any_bdas():
+            print("input_row with NIP [{}] has BDAa".format(input_row.nip))
+            input_row.category = Category.TO_CHECK

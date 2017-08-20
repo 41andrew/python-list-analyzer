@@ -30,6 +30,12 @@ class InputRow:
     def has_any_engagements(self):
         return len(self.engagements) != 0
 
+    def has_any_proposals(self):
+        return len(self.proposals) != 0
+
+    def has_any_bdas(self):
+        return len(self.bda) !=0
+
     def is_entity_name_same_as_crm_name(self, entity_name):
         return entity_name.upper() == self.company_name_in_crm.upper()
 
