@@ -53,29 +53,27 @@ class InputRow(BaseRow):
 
         for engagement in self.engagements:
             engagement_data = engagement.get_column_values_as_list()
-            print('\t\teng = {}'.format(engagement_data))
-
             all_engagements_data.append(engagement_data)
 
         return all_engagements_data
 
     def get_proposals_column_values(self):
-        data = []
+        all_proposals_data = []
 
         for proposal in self.proposals:
             proposal_data = proposal.get_column_values_as_list()
-            data.append(proposal_data)
+            all_proposals_data.append(proposal_data)
 
-        return data
+        return all_proposals_data
 
     def get_bda_column_values(self):
-        data = []
+        all_bda_data = []
 
         for row in self.bda:
             bda_data = row.get_column_values_as_list()
-            data.append(bda_data)
+            all_bda_data.append(bda_data)
 
-        return data
+        return all_bda_data
 
 
 class Category(Enum):

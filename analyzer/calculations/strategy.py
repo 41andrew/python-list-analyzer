@@ -1,5 +1,5 @@
 import abc
-from time import perf_counter
+import timeit
 from ..model.input_row import Category
 from ..reporter.reporter import HtmlReporter
 
@@ -27,7 +27,7 @@ class InputRowsCategoryAssignmentContext:
         self.__strategy.__reporter = self.reporter
 
     def run_category_assignment(self):
-        start_time = perf_counter()
+        start_time = timeit.default_timer()
 
         for row in self.input_rows:
             print("ROW = {}".format(self.input_rows[row]))
@@ -35,7 +35,7 @@ class InputRowsCategoryAssignmentContext:
             current_row = self.input_rows[row]
             self.strategy.assign_category(current_row)
 
-        end_time = perf_counter()
+        end_time = timeit.default_timer()
 
         self.reporter.set_execution_time((end_time - start_time))
         self.reporter.set_report_result(self.input_rows.values())
