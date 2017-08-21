@@ -2,6 +2,7 @@ from analyzer.calculations.strategy import EngagementStrategy
 from analyzer.calculations.strategy import InputRowsCategoryAssignmentContext
 from analyzer.data_loader.data_loader import CsvDataLoader
 from analyzer.data_writer.data_writer import CsvDataWriter
+from analyzer.reporter.reporter import HtmlReporter
 
 
 def print_input_record(input_record):
@@ -28,6 +29,8 @@ if __name__ == "__main__":
     data_writer = CsvDataWriter()
     context = InputRowsCategoryAssignmentContext()
     strategy = EngagementStrategy()
+    reporter = HtmlReporter()
+
 
     # Loading data from csv files
     data_loader.load_data()
@@ -46,3 +49,5 @@ if __name__ == "__main__":
     # Write to file
     data_writer.input_rows = data_loader.input_entities.values()
     data_writer.write_category_assignment_result_to_file("result.csv")
+
+    reporter.create_report_page()
