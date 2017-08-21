@@ -1,8 +1,8 @@
 from enum import Enum
-from . engagement import Engagement
-from . entity import Entity
+from .base_row import BaseRow
 
-class InputRow:
+
+class InputRow(BaseRow):
     """
         Class used to represent input data, which category will be assigned
 
@@ -40,9 +40,9 @@ class InputRow:
     def is_entity_name_same_as_crm_name(self, entity_name):
         return entity_name.upper() == self.company_name_in_crm.upper()
 
-    def write_to_file(self, file_name):
-        for attr, val in self.__dict__.items():
-            print("Attr: {} val {}".format(attr, val))
+    def print_attributes_separated_by_semicolon(self):
+        return "{0.name};{0.nip};{0.company_name_in_crm};{0.category}".format(self)
+
 
 class Category(Enum):
 
