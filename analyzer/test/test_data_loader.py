@@ -1,5 +1,6 @@
-from data_loader.data_loader import CsvDataLoader
 import unittest
+
+from data_loader.data_loader import CsvDataLoader
 
 
 class TestCsvDataLoader(unittest.TestCase):

@@ -1,8 +1,8 @@
+import unittest
+
 from calculations.strategy import *
-from model.input_row import InputRow, Category
 from model.engagement import Engagement
 from model.entity import Entity
-import unittest
 
 
 class CategoryAssignmentStrategyTest(unittest.TestCase):

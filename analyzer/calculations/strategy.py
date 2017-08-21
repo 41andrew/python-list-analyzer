@@ -1,5 +1,6 @@
 import abc
-from model.input_row import Category
+
+from ..model.input_row import Category
 
 
 class InputRowsCategoryAssignmentContext:
@@ -11,13 +12,13 @@ class InputRowsCategoryAssignmentContext:
     """
 
     def __init__(self):
-        self._strategy = None
-        self._input_rows = None
+        self.strategy = None
+        self.input_rows = None
 
     def run_category_assignment(self):
-        for row in self._input_rows:
-            print("ROW = {}".format(self._input_rows[row]))
-            self._strategy.assign_category(self._input_rows[row])
+        for row in self.input_rows:
+            print("ROW = {}".format(self.input_rows[row]))
+            self.strategy.assign_category(self.input_rows[row])
 
 
 class CategoryAssignmentStrategy(metaclass=abc.ABCMeta):
@@ -38,18 +39,32 @@ class CategoryAssignmentStrategy(metaclass=abc.ABCMeta):
         return model.entity.is_restricted() or model.is_active()
 
     @staticmethod
-    def end_of_calculation_if_row_not_in_capital_group(rows):
+    def end_of_calculation_if_row_not_in_capital_group(collection):
+        """
+        Check if category is finally assign, when company from input row is NOT IN capital group.
 
-        if CategoryAssignmentStrategy.is_any_company_restricted(rows):
+        :param collection: list of objects - engagements/proposals etc
+        :return: True if category is finally assigned. False if there is a need to pass input_row to another strategy
+        """
+
+        if CategoryAssignmentStrategy.is_any_company_restricted(collection):
             # category is already assigned - no need to go deeper
             return True
         else:
             print("Category 1 and go deeper")
             return False
 
-    def end_of_calculation_if_row_in_capital_group(self, rows, input_row):
+    def end_of_calculation_if_row_in_capital_group(self, collection, input_row):
+        """
+        Check if category is finally assign, when company from input row is IN capital group.
+        Category is assign inside this method
 
-        output_category = self.is_any_company_restricted_and_its_same_company_as_checked(rows, input_row)
+        :param collection: list of objects - engagements/proposals etc
+        :param input_row: current row for which we want to assign category
+        :return: True if category is finally assigned. False if there is a need to pass input_row to another strategy
+        """
+
+        output_category = self.is_any_company_restricted_and_its_same_company_as_checked(collection, input_row)
 
         if output_category == 3:
             input_row.category = Category.NOT_ACCEPTED
@@ -62,39 +77,46 @@ class CategoryAssignmentStrategy(metaclass=abc.ABCMeta):
             return False
 
     @staticmethod
-    def is_any_company_restricted(rows):
+    def is_any_company_restricted(collection):
+        """
+
+        :param collection: list of objects - engagements/proposals etc
+        :return:
+        """
+
         is_input_company_restricted = False
 
-        for row in rows:
-            if CategoryAssignmentStrategy.is_input_row_restricted_by_description_or_status(row):
-                print("Row with NIP [{}] is restricted - category 3".format(row.entity.nip))
+        for model_object in collection:
+            if CategoryAssignmentStrategy.is_input_row_restricted_by_description_or_status(model_object):
+                print("Row with NIP [{}] is restricted - category 3".format(model_object.entity.nip))
                 is_input_company_restricted = True
                 break
 
         return is_input_company_restricted
 
     @staticmethod
-    def is_any_company_restricted_and_its_same_company_as_checked(rows, input_row):
+    def is_any_company_restricted_and_its_same_company_as_checked(collection, input_row):
         """
-        Returns :
-        1 - none of the rows is restricted
-        2 - there was a restricted row BUT it was DIFFERENT company than input one
-        3 - there was a restricted row AND it was THE SAME company as input
-        """
-        any_company_restricted = False
-        restricted_company_is_same_as_input = False
 
-        for row in rows:
-            if CategoryAssignmentStrategy.is_input_row_restricted_by_description_or_status(row):
+
+        :param collection: collection: list of objects - engagements/proposals etc
+        :param input_row: input_row: current row for which we want to assign category
+        :return: 1 - none of the rows is restricted\n
+                 2 - there was a restricted row BUT it was DIFFERENT company than input one\n
+                 3 - there was a restricted row AND it was THE SAME company as input
+        """
+
+        any_company_restricted = False
+
+        for model_object in collection:
+            if CategoryAssignmentStrategy.is_input_row_restricted_by_description_or_status(model_object):
                 any_company_restricted = True
 
-                if input_row.is_entity_name_same_as_crm_name(row.entity.entity_name):
+                if input_row.is_entity_name_same_as_crm_name(model_object.entity.entity_name):
                     print("There is a restricted company and it's same as input one - category 3")
-                    restricted_company_is_same_as_input = True
-
                     return 3
 
-        if any_company_restricted and not restricted_company_is_same_as_input:
+        if any_company_restricted:
             print("There was restricted company but different than input one - category 2, check further")
             return 2
         elif not any_company_restricted:
@@ -137,10 +159,10 @@ class EngagementStrategy(CategoryAssignmentStrategy):
 
 class ProposalStrategy(CategoryAssignmentStrategy):
 
-    def end_of_calculation_if_row_in_capital_group(self, rows, input_row):
+    def end_of_calculation_if_row_in_capital_group(self, collection, input_row):
 
         print("method end of in Proposal Strategy")
-        output_category = self.is_any_company_restricted_and_its_same_company_as_checked(rows, input_row)
+        output_category = self.is_any_company_restricted_and_its_same_company_as_checked(collection, input_row)
 
         if output_category == 3:
             input_row.category = Category.NOT_ACCEPTED
@@ -181,7 +203,6 @@ class ProposalStrategy(CategoryAssignmentStrategy):
         else:
             print("input_row with NIP [{}] has no proposals".format(input_row.nip))
             BDAStrategy().assign_category(input_row)
-
 
 
 class BDAStrategy(CategoryAssignmentStrategy):

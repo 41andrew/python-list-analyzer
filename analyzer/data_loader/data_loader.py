@@ -1,8 +1,9 @@
-from model.input_row import InputRow
-from model.engagement import Engagement
-from model.entity import Entity
-from model.proposal import Proposal
-from model.bda import BusinessDevelopmentActivities
+from ..model.engagement import Engagement
+from ..model.input_row import InputRow
+from ..model.proposal import Proposal
+from ..model.bda import BusinessDevelopmentActivities
+from ..model.entity import Entity
+import os
 
 
 class CsvDataLoader:
@@ -50,13 +51,14 @@ class CsvDataLoader:
         :raise FileNotFoundError: when file is not found
         :return: List(str) of lines from file
         """
+        print("Actually reading file : {}".format(os.path.abspath(self.data_paths[file_path_key])))
 
         try:
             with open(self.data_paths[file_path_key], 'r', encoding='utf8') as source_file:
                 return source_file.readlines()
-        except FileNotFoundError:
+        except FileNotFoundError as e:
+            print(e)
             self.error_messages.add("File {} not found".format(file_path_key))
-            return None
 
     def _add_input_rows_to_dict(self):
         """
@@ -169,7 +171,9 @@ class CsvDataLoader:
                                                         line[6], line[7], line[8], line[9])
                     return bda
 
-        except IndexError:
+        except IndexError as e:
+            print(e)
             self.error_messages.add("Exception while creating {} object - bal line parsing".format(file_path_key_in_dict))
-        except TypeError:
+        except TypeError as e:
+            print(e)
             self.error_messages.add("Exception while creating {} object".format(file_path_key_in_dict))

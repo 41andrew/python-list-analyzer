@@ -27,4 +27,3 @@ class Proposal:
 
     def is_active(self):
         return self.status in Proposal.proposal_restricted_status
-        # pytanie - czy jest różnica pomiędzy self.proposal_restricted_status a Proposal.proposal_restricted_status?

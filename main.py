@@ -1,6 +1,6 @@
-from data_loader.data_loader import CsvDataLoader
-from calculations.strategy import InputRowsCategoryAssignmentContext
-from calculations.strategy import EngagementStrategy
+from analyzer.calculations.strategy import EngagementStrategy
+from analyzer.calculations.strategy import InputRowsCategoryAssignmentContext
+from analyzer.data_loader.data_loader import CsvDataLoader
 
 
 def print_input_record(input_record):
@@ -31,8 +31,8 @@ if __name__ == "__main__":
     
     # Application main goal is to assign category for each company
     context = InputRowsCategoryAssignmentContext()
-    context._strategy = strategy
-    context._input_rows = data_loader.input_entities
+    context.strategy = strategy
+    context.input_rows = data_loader.input_entities
 
     # Assign categories
     context.run_category_assignment()
