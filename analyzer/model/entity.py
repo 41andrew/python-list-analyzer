@@ -1,4 +1,7 @@
-class Entity:
+from .base_row import BaseRow
+
+
+class Entity(BaseRow):
     """
     Class used to represent company entity
 
@@ -30,3 +33,6 @@ class Entity:
 
     def is_restricted(self):
         return self.description in Entity.descriptions_for_category_3
+
+    def print_attributes_separated_by_semicolon(self):
+        return "{0.nip};{0.national_account};{0.entity_name};{0.description}".format(self)

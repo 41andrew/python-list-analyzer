@@ -1,4 +1,7 @@
-class Proposal:
+from .base_row import BaseRow
+
+
+class Proposal(BaseRow):
     """
     Class used to represent proposal row from file with Proposals
     Attributes:
@@ -27,3 +30,7 @@ class Proposal:
 
     def is_active(self):
         return self.status in Proposal.proposal_restricted_status
+
+    def print_attributes_separated_by_semicolon(self):
+        return "{0.entity};{0.proposal_id};{0.proposal_name};{0.proposal_partner};{0.create_date};" \
+               "{0.status};".format(self)

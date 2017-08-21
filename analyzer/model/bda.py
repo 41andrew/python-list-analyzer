@@ -1,4 +1,7 @@
-class BusinessDevelopmentActivities:
+from .base_row import BaseRow
+
+
+class BusinessDevelopmentActivities(BaseRow):
     """
     Class used to represent row from file with Business Development Activities
 
@@ -24,3 +27,6 @@ class BusinessDevelopmentActivities:
     def __str__(self):
         return "[{0.entity}][{0.bda_id}][{0.subject}][{0.details}][{0.activity_date}][{0.contact}]"\
                "[{0.category}]".format(self)
+
+    def print_attributes_separated_by_semicolon(self):
+        return "{0.entity};{0.bda_id};{0.subject};{0.details};{0.activity_date};{0.contact};{0.category}".format(self)

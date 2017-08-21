@@ -1,5 +1,6 @@
 from enum import Enum
-
+from . engagement import Engagement
+from . entity import Entity
 
 class InputRow:
     """
@@ -39,6 +40,9 @@ class InputRow:
     def is_entity_name_same_as_crm_name(self, entity_name):
         return entity_name.upper() == self.company_name_in_crm.upper()
 
+    def write_to_file(self, file_name):
+        for attr, val in self.__dict__.items():
+            print("Attr: {} val {}".format(attr, val))
 
 class Category(Enum):
 

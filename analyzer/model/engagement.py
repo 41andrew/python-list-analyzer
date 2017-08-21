@@ -1,4 +1,7 @@
-class Engagement:
+from .base_row import BaseRow
+
+
+class Engagement(BaseRow):
     """
     Class used to represent row from file with Engagements
 
@@ -27,3 +30,7 @@ class Engagement:
 
     def is_active(self):
         return self.status.upper() == "ACTIVE"
+
+    def print_attributes_separated_by_semicolon(self):
+        return "{0.entity};{0.engagement_code};{0.engagement_name};{0.engagement_partner};{0.create_date};" \
+               "{0.status};".format(self)
