@@ -18,6 +18,7 @@ class Entity(BaseRow):
                                    "audit restricted client - SLP assigned",
                                    "SEC/Audit",
                                    "SEC/Audit client - PL Secondary approval"]
+    COLUMN_NAMES = ["NIP", "NATIONAL_ACCOUNT", "ENTITY_NAME", "DESCRIPTION"]
 
     def __init__(self, nip, national_account, entity_name, description):
         self.nip = nip
@@ -36,3 +37,12 @@ class Entity(BaseRow):
 
     def print_attributes_separated_by_semicolon(self):
         return "{0.nip};{0.national_account};{0.entity_name};{0.description}".format(self)
+
+    def get_column_values_as_list(self):
+        data = list()
+        data.append(self.nip)
+        data.append(self.national_account)
+        data.append(self.entity_name)
+        data.append(self.description)
+
+        return data

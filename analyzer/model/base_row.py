@@ -11,3 +11,7 @@ class BaseRow(metaclass=abc.ABCMeta):
             f.ex 'property1;property2;property3'
         """
         pass
+
+    @abc.abstractmethod
+    def get_column_values_as_list(self):
+        pass
