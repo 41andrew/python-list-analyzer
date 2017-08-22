@@ -233,3 +233,12 @@ class BDAStrategy(CategoryAssignmentStrategy):
         if input_row.has_any_bdas():
             print("input_row with NIP [{}] has BDAa".format(input_row.nip))
             input_row.category = Category.TO_CHECK
+        else:
+            pass
+
+
+class CampaignStrategy(CategoryAssignmentStrategy):
+
+    def assign_category(self, input_row):
+        pass
+
