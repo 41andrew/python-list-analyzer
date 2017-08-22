@@ -2,6 +2,7 @@ from analyzer.calculations.strategy import EngagementStrategy
 from analyzer.calculations.strategy import InputRowsCategoryAssignmentContext
 from analyzer.data_loader.data_loader import CsvDataLoader
 from analyzer.data_writer.data_writer import CsvDataWriter
+from analyzer.utilities.properties_reader import PropertiesReader
 
 
 def print_input_record(input_record):
@@ -49,3 +50,5 @@ if __name__ == "__main__":
 
     # Generate HTML report
     context.reporter.create_report_page()
+
+    print(PropertiesReader.get_properties_file_as_dict())

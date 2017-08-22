@@ -103,3 +103,5 @@ ENV/
 # .idea
 .idea/
 .DS_Store
+source_files/db.properties
+output_report/*.html
