@@ -26,6 +26,7 @@ class InputRow(BaseRow):
         self.engagements = []
         self.proposals = []
         self.bda = []
+        self.campaigns = []
 
     def __str__(self):
         return "[{0.name}][{0.nip}][{0.category}][{0.company_name_in_crm}]".format(self)
@@ -38,6 +39,9 @@ class InputRow(BaseRow):
 
     def has_any_bdas(self):
         return len(self.bda) != 0
+
+    def has_any_campaigns(self):
+        return len(self.campaigns) != 0
 
     def is_entity_name_same_as_crm_name(self, entity_name):
         return entity_name.upper() == self.company_name_in_crm.upper()

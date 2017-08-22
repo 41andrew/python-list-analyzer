@@ -234,7 +234,7 @@ class BDAStrategy(CategoryAssignmentStrategy):
             print("input_row with NIP [{}] has BDAa".format(input_row.nip))
             input_row.category = Category.TO_CHECK
         else:
-            pass
+            CampaignStrategy(input_row).assign_category()
 
 
 class CampaignStrategy(CategoryAssignmentStrategy):
@@ -242,3 +242,11 @@ class CampaignStrategy(CategoryAssignmentStrategy):
     def assign_category(self, input_row):
         pass
 
+    def assign_category(self, input_row):
+        print("Checking campaigns")
+
+        if input_row.has_any_campaigns():
+            print("input_row with NIP [{}] has campaigns".format(input_row.nip))
+            input_row.category = Category.TO_CHECK
+        else:
+            pass
