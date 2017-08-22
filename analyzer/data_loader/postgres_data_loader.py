@@ -1,4 +1,5 @@
 import psycopg2
+from ..utilities.properties_reader import PropertiesReader
 
 class PostGreDataLoader:
 
@@ -8,17 +9,26 @@ class PostGreDataLoader:
 
     all_campaigns = []
 
-    try:
-        conn = psycopg2.connect("dbname='ContactDirect' user='master' host='10.162.2.152' password='test'")
-    except Exception as e:
-        print (e)
+    def __init__(self):
+        self.props = PropertiesReader.get_properties_file_as_dict()
+        self.conn = None
 
-    cursor = conn.cursor()
+    def connect_to_pgsql(self):
+        try:
+            self.conn = psycopg2.connect("dbname='ContactDirect' user='master' host='{}' password='{}'".format(self.props['host'],self.props['pass']))
+        except Exception as e:
+            print (e)
 
-    sql = """SELECT * FROM "Custom"."GetRecordsToExport"((%s), '2017-08-01', '2017-08-10'"""
+    def load_data(self):
 
-    for x in CAMPAIGN_ID_LIST:
-        cursor.execute(sql, (x))
-        all_campaigns.extend(cursor.fetchall())
+        self.connect_to_pgsql()
+
+        cursor = self.conn.cursor()
+
+        sql = """SELECT * FROM "Custom"."GetRecordsToExport"((%s), '2017-08-01', '2017-08-10'"""
+
+        for x in self.CAMPAIGN_ID_LIST:
+            cursor.execute(sql, (x))
+            self.all_campaigns.extend(cursor.fetchall())
 
 
