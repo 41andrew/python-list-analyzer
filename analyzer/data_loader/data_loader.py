@@ -43,6 +43,10 @@ class CsvDataLoader:
         self._add_proposals_to_corresponding_input_row()
         self._add_bda_to_corresponding_input_row()
 
+    def get_input_rows_as_dict(self):
+        self._add_input_rows_to_dict()
+        return self.input_entities
+
     def _read_lines_from_file(self, file_path_key):
         """
         Method read all lines from file under given path

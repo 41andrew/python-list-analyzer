@@ -1,4 +1,5 @@
 import pyodbc
+from .data_loader import CsvDataLoader
 from ..model.engagement import Engagement
 from ..model.input_row import InputRow
 from ..model.proposal import Proposal
@@ -15,6 +16,7 @@ class CrmDataLoader:
 
     def __init__(self):
         self.conn = None
+        self.input_from_csv = CsvDataLoader().get_input_rows_as_dict()
         self.connect_to_crm()
 
     def connect_to_crm(self):
@@ -27,7 +29,6 @@ class CrmDataLoader:
 
     def find_nationalaccount_for_input_nip(self, nip):
 
-        capital_group = ""
 
         cursor = self.conn.cursor()
 
@@ -49,7 +50,7 @@ class CrmDataLoader:
 
         cursor = self.conn.cursor()
 
-        sql = """SELECT na.NationalAccount, en.EntityName, cl.Description, eg.Engagement_ID, eg.EngagementName, CONCAT(em.LastName, ' ', em.FirstName) AS 'EngagementPartner', es.Status
+        sql = """SELECT na.NationalAccount, en.EntityName, cl.Description, eg.Engagement_ID, eg.EngagementName, CONCAT(em.LastName, ' ', em.FirstName) AS 'EngagementPartner', eg.CreateDate, es.Status
               FROM ems.v_Engagement eg INNER JOIN
                         ems.v_Entity en ON eg.Entity_ID = en.Entity_ID LEFT JOIN
                         ems.v_NationalAccount na ON en.NationalAccount_ID = na.NationalAccount_ID INNER JOIN
@@ -62,7 +63,7 @@ class CrmDataLoader:
 
         cursor.execute(sql.format(account))
 
-        self.crm_engagements.extend(cursor.fetchall())
+        return cursor.fetchall()
 
     def find_proposals_for_nationalaccount(self, account):
 
@@ -80,7 +81,7 @@ class CrmDataLoader:
 
         cursor.execute(sql.format(account))
 
-        self.crm_proposals.extend(cursor.fetchall())
+        return cursor.fetchall()
 
     def find_bda_for_nationalaccount(self, account):
 
@@ -98,13 +99,13 @@ class CrmDataLoader:
 
         cursor.execute(sql.format(account))
 
-        self.crm_bda.extend(cursor.fetchall())
+        return cursor.fetchall()
 
     def find_engagements_for_nip(self, nip):
 
         cursor = self.conn.cursor()
 
-        sql = """SELECT na.NationalAccount, en.EntityName, cl.Description, eg.Engagement_ID, eg.EngagementName, CONCAT(em.LastName, ' ', em.FirstName) AS 'EngagementPartner', es.Status
+        sql = """SELECT na.NationalAccount, en.EntityName, cl.Description, eg.Engagement_ID, eg.EngagementName, CONCAT(em.LastName, ' ', em.FirstName) AS 'EngagementPartner', eg.CreateDate, es.Status
                       FROM ems.v_Engagement eg INNER JOIN
                                 ems.v_Entity en ON eg.Entity_ID = en.Entity_ID LEFT JOIN
                                 ems.v_NationalAccount na ON en.NationalAccount_ID = na.NationalAccount_ID INNER JOIN
@@ -116,7 +117,7 @@ class CrmDataLoader:
         				"""
 
         cursor.execute(sql.format(nip))
-        self.crm_engagements.extend(cursor.fetchall())
+        return cursor.fetchall()
 
     def find_proposals_for_nip(self, nip):
 
@@ -133,7 +134,7 @@ class CrmDataLoader:
                     WHERE en.TaxNumber = '{}'"""
 
         cursor.execute(sql.format(nip))
-        self.crm_proposals.extend(cursor.fetchall())
+        return cursor.fetchall()
 
     def find_bda_for_nip(self, nip):
 
@@ -150,7 +151,7 @@ class CrmDataLoader:
                     WHERE en.TaxNumber = '{}'"""
 
         cursor.execute(sql.format(nip))
-        self.crm_bda.extend(cursor.fetchall())
+        return cursor.fetchall()
 
 
     def load_data_from_crm(self):
@@ -162,7 +163,8 @@ class CrmDataLoader:
             grupa = self.find_nationalaccount_for_input_nip(nip)
 
             if (grupa in self.no_national_account) or (not grupa):
-                self.find_engagements_for_nip(nip)
+                self.input_nips2[nip].engagements = self.find_engagements_for_nip(nip)
+                # self.find_engagements_for_nip(nip)
                 self.find_proposals_for_nip(nip)
                 self.find_bda_for_nip(nip)
             else:
@@ -177,3 +179,96 @@ class CrmDataLoader:
         #print (self.crm_proposals)
         #print ("")
         #print (self.crm_bda)
+
+    def load_data_from_crm2(self):
+        self.connect_to_crm()
+
+        for nip in self.input_from_csv:
+
+            grupa = self.find_nationalaccount_for_input_nip(nip)
+
+            if (grupa in self.no_national_account) or (not grupa):
+                engagements_from_db  = self.find_engagements_for_nip(nip)
+                proposals_from_db = self.find_proposals_for_nip(nip)
+                bda_from_db = self.find_proposals_for_nip(nip)
+
+                for engagement_row in engagements_from_db:
+                    entity = Entity(national_account=engagement_row[0],
+                                    entity_name=engagement_row[1],
+                                    description=engagement_row[2])
+                    engagement = Engagement(entity=entity,
+                                            engagement_code=engagement_row[3],
+                                            engagement_name=engagement_row[4],
+                                            engagement_partner=engagement_row[5],
+                                            create_date=engagement_row[6],
+                                            status=engagement_row[7])
+                    self.input_from_csv[nip].engagements.append(engagement)
+
+                for proposal_row in proposals_from_db:
+                    entity = Entity(national_account=proposal_row[0],
+                                    entity_name=proposal_row[1],
+                                    description=proposal_row[2])
+                    proposal = Proposal(entity=entity,
+                                        proposal_id=proposal_row[3],
+                                        proposal_name=proposal_row[4],
+                                        proposal_partner=proposal_row[5],
+                                        create_date=proposal_row[6],
+                                        status=proposal_row[7])
+                    self.input_from_csv[nip].proposals.append(proposal)
+
+                for bda_row in bda_from_db:
+                    entity = Entity(national_account=bda_row[0],
+                                    entity_name=bda_row[1],
+                                    description=bda_row[2])
+                    bda = BusinessDevelopmentActivities(entity=entity,
+                                                        bda_id=bda_row[3],
+                                                        subject=bda_row[4],
+                                                        details=bda_row[5],
+                                                        activity_date=bda_row[6],
+                                                        contact=bda_row[7],
+                                                        category=bda_row[8])
+                    self.input_from_csv[nip].bda.append(bda)
+
+
+
+            else:
+                engagements_from_db = self.find_engagements_for_nationalaccount(grupa)
+                proposals_from_db = self.find_proposals_for_nationalaccount(grupa)
+                bda_from_db = self.find_proposals_for_nationalaccount(grupa)
+
+                for engagement_row in engagements_from_db:
+                    entity = Entity(national_account=engagement_row[0],
+                                    entity_name=engagement_row[1],
+                                    description=engagement_row[2])
+                    engagement = Engagement(entity=entity,
+                                            engagement_code=engagement_row[3],
+                                            engagement_name=engagement_row[4],
+                                            engagement_partner=engagement_row[5],
+                                            create_date=engagement_row[6],
+                                            status=engagement_row[7])
+                    self.input_from_csv[nip].engagements.append(engagement)
+
+                for proposal_row in proposals_from_db:
+                    entity = Entity(national_account=proposal_row[0],
+                                    entity_name=proposal_row[1],
+                                    description=proposal_row[2])
+                    proposal = Proposal(entity=entity,
+                                        proposal_id=proposal_row[3],
+                                        proposal_name=proposal_row[4],
+                                        proposal_partner=proposal_row[5],
+                                        create_date=proposal_row[6],
+                                        status=proposal_row[7])
+                    self.input_from_csv[nip].proposals.append(proposal)
+
+                for bda_row in bda_from_db:
+                    entity = Entity(national_account=bda_row[0],
+                                    entity_name=bda_row[1],
+                                    description=bda_row[2])
+                    bda = BusinessDevelopmentActivities(entity=entity,
+                                                        bda_id=bda_row[3],
+                                                        subject=bda_row[4],
+                                                        details=bda_row[5],
+                                                        activity_date=bda_row[6],
+                                                        contact=bda_row[7],
+                                                        category=bda_row[8])
+                    self.input_from_csv[nip].bda.append(bda)

@@ -18,7 +18,7 @@ class InputRow(BaseRow):
 
     COLUMN_NAMES = ["NAME", "NIP", "NAME_IN_CRM", "CATEGORY"]
 
-    def __init__(self, name, nip, company_name_in_crm):
+    def __init__(self, name="", nip="", company_name_in_crm=""):
         self.name = name
         self.nip = nip
         self.category = Category.NOT_ASSIGNED
