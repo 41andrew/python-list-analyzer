@@ -23,10 +23,10 @@ class PostGreDataLoader:
 
         cursor = self.conn.cursor()
 
-        sql = """SELECT * FROM "Custom"."GetRecordsToExport"((%s), '2017-08-01', '2017-08-10'"""
+        sql = """SELECT * FROM "Custom"."GetRecordsToExport"(({}), '2017-08-01', '2017-08-10')"""
 
         for x in self.CAMPAIGN_ID_LIST:
-            cursor.execute(sql, (x))
+            cursor.execute(sql.format(x))
             self.all_campaigns.extend(cursor.fetchall())
 
         print (self.all_campaigns)
