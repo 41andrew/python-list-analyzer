@@ -1,4 +1,9 @@
 import pyodbc
+from ..model.engagement import Engagement
+from ..model.input_row import InputRow
+from ..model.proposal import Proposal
+from ..model.bda import BusinessDevelopmentActivities
+from ..model.entity import Entity
 
 class CrmDataLoader:
 
@@ -33,9 +38,10 @@ class CrmDataLoader:
 
         cursor.execute(sql.format(nip))
 
+        # Pobieram nazwę grupy kapitałowej
         capital_group = (cursor.fetchone()[0])
 
-        print (capital_group)
+        print ("NIP: {} ma grupę kapitałową: {}".format(nip,capital_group))
 
         return capital_group
 
@@ -157,8 +163,8 @@ class CrmDataLoader:
 
             if (grupa in self.no_national_account) or (not grupa):
                 self.find_engagements_for_nip(nip)
-                self.find_proposals_for_nip()
-                self.find_bda_for_nip()
+                self.find_proposals_for_nip(nip)
+                self.find_bda_for_nip(nip)
             else:
                 self.find_engagements_for_nationalaccount(grupa)
                 self.find_proposals_for_nationalaccount(grupa)
@@ -166,8 +172,8 @@ class CrmDataLoader:
 
 
 
-        print (self.crm_engagements)
-        print ("")
-        print (self.crm_proposals)
-        print ("")
-        print (self.crm_bda)
+        #print (self.crm_engagements)
+        #print ("")
+        #print (self.crm_proposals)
+        #print ("")
+        #print (self.crm_bda)
