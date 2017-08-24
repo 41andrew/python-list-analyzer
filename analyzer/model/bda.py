@@ -22,7 +22,7 @@ class BusinessDevelopmentActivities(BaseRow):
     def __init__(self, entity, bda_id, subject, details, activity_date, contact, category):
         self.entity = entity
         self.bda_id = bda_id
-        self.subject = subject
+        self.subject = (subject).encode('windows-1250', 'ignore').decode('windows-1250')
         self.details = details
         self.activity_date = activity_date
         self.contact = contact

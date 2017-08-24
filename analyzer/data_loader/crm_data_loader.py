@@ -95,7 +95,7 @@ class CrmDataLoader:
                                     ems.v_CustomList cl ON ea.SentinelCategory_ID = cl.CustomList_ID  LEFT JOIN
                                     ems.v_Employee em ON bd.Employee_ID = em.Employee_ID INNER JOIN
                                     ems.v_BDActivityCategory bdc ON bd.BDActivityCategory_ID = bdc.BDActivityCategory_ID
-                    WHERE na.NationalAccount = '{}' bd.ActivityDate >= '2017'"""
+                    WHERE na.NationalAccount = '{}' AND bd.ActivityDate >= '2017'"""
 
         cursor.execute(sql.format(account))
 
@@ -181,7 +181,6 @@ class CrmDataLoader:
         #print (self.crm_bda)
 
     def load_data_from_crm2(self):
-        self.connect_to_crm()
 
         for nip in self.input_from_csv:
 

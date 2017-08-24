@@ -19,10 +19,10 @@ class InputRow(BaseRow):
     COLUMN_NAMES = ["NAME", "NIP", "NAME_IN_CRM", "CATEGORY"]
 
     def __init__(self, name="", nip="", company_name_in_crm=""):
-        self.name = name
+        self.name = (name).encode('windows-1250', 'ignore').decode('windows-1250')
         self.nip = nip
         self.category = Category.NOT_ASSIGNED
-        self.company_name_in_crm = company_name_in_crm
+        self.company_name_in_crm = (company_name_in_crm).encode('windows-1250', 'ignore').decode('windows-1250')
         self.engagements = []
         self.proposals = []
         self.bda = []
