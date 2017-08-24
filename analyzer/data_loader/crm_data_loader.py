@@ -58,7 +58,7 @@ class CrmDataLoader:
                         ems.v_CustomList cl ON ea.SentinelCategory_ID = cl.CustomList_ID LEFT JOIN
                         ems.v_Employee em ON eg.EngagementPartner_ID = em.Employee_ID INNER JOIN
                         ems.v_EngagementStatus es ON eg.EngagementStatus_ID = es.EngagementStatus_ID
-              WHERE na.NationalAccount = '{}'
+              WHERE na.NationalAccount = '{}' AND eg.CreateDate >= '2015'
 				"""
 
         cursor.execute(sql.format(account))
@@ -77,7 +77,7 @@ class CrmDataLoader:
                                     ems.v_CustomList cl ON ea.SentinelCategory_ID = cl.CustomList_ID LEFT JOIN
                                     ems.v_Employee em ON pr.KpmgContact_ID = em.Employee_ID INNER JOIN
                                     ems.v_ProposalStatus ps ON pr.ProposalStatus_ID = ps.ProposalStatus_ID
-                    WHERE na.NationalAccount = '{}'"""
+                    WHERE na.NationalAccount = '{}' AND pr.CreateDate >= '2017'"""
 
         cursor.execute(sql.format(account))
 
@@ -95,7 +95,7 @@ class CrmDataLoader:
                                     ems.v_CustomList cl ON ea.SentinelCategory_ID = cl.CustomList_ID  LEFT JOIN
                                     ems.v_Employee em ON bd.Employee_ID = em.Employee_ID INNER JOIN
                                     ems.v_BDActivityCategory bdc ON bd.BDActivityCategory_ID = bdc.BDActivityCategory_ID
-                    WHERE na.NationalAccount = '{}'"""
+                    WHERE na.NationalAccount = '{}' bd.ActivityDate >= '2017'"""
 
         cursor.execute(sql.format(account))
 
@@ -113,7 +113,7 @@ class CrmDataLoader:
                                 ems.v_CustomList cl ON ea.SentinelCategory_ID = cl.CustomList_ID LEFT JOIN
                                 ems.v_Employee em ON eg.EngagementPartner_ID = em.Employee_ID INNER JOIN
                                 ems.v_EngagementStatus es ON eg.EngagementStatus_ID = es.EngagementStatus_ID
-                      WHERE en.TaxNumber = '{}'
+                      WHERE en.TaxNumber = '{}' AND eg.CreateDate >= '2017'
         				"""
 
         cursor.execute(sql.format(nip))
@@ -131,7 +131,7 @@ class CrmDataLoader:
                                     ems.v_CustomList cl ON ea.SentinelCategory_ID = cl.CustomList_ID LEFT JOIN
                                     ems.v_Employee em ON pr.KpmgContact_ID = em.Employee_ID INNER JOIN
                                     ems.v_ProposalStatus ps ON pr.ProposalStatus_ID = ps.ProposalStatus_ID
-                    WHERE en.TaxNumber = '{}'"""
+                    WHERE en.TaxNumber = '{}' AND pr.CreateDate >= '2017'"""
 
         cursor.execute(sql.format(nip))
         return cursor.fetchall()
@@ -148,7 +148,7 @@ class CrmDataLoader:
                                     ems.v_CustomList cl ON ea.SentinelCategory_ID = cl.CustomList_ID  LEFT JOIN
                                     ems.v_Employee em ON bd.Employee_ID = em.Employee_ID INNER JOIN
                                     ems.v_BDActivityCategory bdc ON bd.BDActivityCategory_ID = bdc.BDActivityCategory_ID
-                    WHERE en.TaxNumber = '{}'"""
+                    WHERE en.TaxNumber = '{}' AND bd.ActivityDate >= '2017'"""
 
         cursor.execute(sql.format(nip))
         return cursor.fetchall()
