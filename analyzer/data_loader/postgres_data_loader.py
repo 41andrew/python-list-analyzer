@@ -1,6 +1,7 @@
 import psycopg2
 from ..utilities.properties_reader import PropertiesReader
 
+
 class PostGreDataLoader:
 
     CAMPAIGN_ID_LIST = [35, 36, 40, 48]
@@ -13,9 +14,11 @@ class PostGreDataLoader:
 
     def connect_to_pgsql(self):
         try:
-            self.conn = psycopg2.connect("dbname='ContactDirect' user='master' host='{}' password='{}'".format(self.props['host'],self.props['pass']))
+            self.conn = psycopg2.connect("dbname='ContactDirect' user='master' host='{}' password='{}'"
+                                         .format(self.props['host'], self.props['pass']))
         except Exception as e:
-            print (e)
+            print("Exception while connecting with database")
+            print("Error message : {}".format(e))
 
     def load_data_from_pgs(self):
 
@@ -29,6 +32,4 @@ class PostGreDataLoader:
             cursor.execute(sql.format(x))
             self.all_campaigns.extend(cursor.fetchall())
 
-        print (self.all_campaigns)
-
-
+        print(self.all_campaigns)

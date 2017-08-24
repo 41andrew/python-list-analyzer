@@ -1,10 +1,10 @@
 import pyodbc
 from .data_loader import CsvDataLoader
 from ..model.engagement import Engagement
-from ..model.input_row import InputRow
 from ..model.proposal import Proposal
 from ..model.bda import BusinessDevelopmentActivities
 from ..model.entity import Entity
+
 
 class CrmDataLoader:
 
@@ -23,12 +23,12 @@ class CrmDataLoader:
 
         try:
             self.conn = pyodbc.connect(r'DRIVER={SQL Server};SERVER=plwawdb20,1113;DATABASE=MARS4_API;Trusted_Connection=yes;')
-            print ("Connected to database")
-        except:
-            print ("Unable to connect to the database")
+            print("Connected to database")
+        except Exception as e:
+            print("Unable to connect to the database")
+            print("Error msg : {}".format(e))
 
     def find_nationalaccount_for_input_nip(self, nip):
-
 
         cursor = self.conn.cursor()
 
@@ -42,7 +42,7 @@ class CrmDataLoader:
         # Pobieram nazwę grupy kapitałowej
         capital_group = (cursor.fetchone()[0])
 
-        print ("NIP: {} ma grupę kapitałową: {}".format(nip,capital_group))
+        print("NIP: {} ma grupę kapitałową: {}".format(nip, capital_group))
 
         return capital_group
 
@@ -153,7 +153,6 @@ class CrmDataLoader:
         cursor.execute(sql.format(nip))
         return cursor.fetchall()
 
-
     def load_data_from_crm(self):
 
         self.connect_to_crm()
@@ -230,8 +229,6 @@ class CrmDataLoader:
                                                         contact=bda_row[8],
                                                         category=bda_row[9])
                     self.input_from_csv[nip].bda.append(bda)
-
-
 
             else:
                 engagements_from_db = self.find_engagements_for_nationalaccount(grupa)
