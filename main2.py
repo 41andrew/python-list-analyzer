@@ -22,12 +22,13 @@ if __name__ == "__main__":
     # Loading data from CRM
     crm_loader.load_data_from_crm2()
     # Loading data from postgres database
+    pgs_loader.set_input_from_csv(crm_loader.input_from_csv)
     pgs_loader.load_data_from_pgs()
 
     ###############################
     # Add input from CRM to postgres
     ###############################
-    pgs_loader.set_input_from_csv(crm_loader.input_from_csv)
+
 
     # Currently used strategy
     context.strategy = strategy

@@ -125,8 +125,8 @@ class HtmlReporter(Reporter):
 
     def __build_detailed_data_about_one_row_and_its_collections(self, input_row):
 
-        self.__page_content += HtmlPageBuilder.add_button(css_class='btn btn-info', data_toggle='collapse', data_target='#demo', text='button')
-        self.__page_content += HtmlPageBuilder.add_collapsible_page_element('h3', 'demo', 'text-left collapse', 2, 'Entity: () NIP: {}'.format(input_row.name, input_row.nip))
+        # nie dziala - self.__page_content += HtmlPageBuilder.add_button(css_class='btn btn-info', data_toggle='collapse', data_target='#demo', text='button')
+        self.__page_content += HtmlPageBuilder.add_page_element('h3', 'demo', 'text-left', 2, 'Entity: {} NIP: {}'.format(input_row.name, input_row.nip))
 
         #if input_row.has_any_engagements():
         self.__build_category_table('Engagements : ', Engagement.COLUMN_NAMES,
