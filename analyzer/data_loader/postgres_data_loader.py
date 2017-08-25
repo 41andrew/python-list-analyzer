@@ -1,5 +1,11 @@
 import psycopg2
 from ..utilities.properties_reader import PropertiesReader
+from .data_loader import CsvDataLoader
+from ..model.engagement import Engagement
+from ..model.proposal import Proposal
+from ..model.bda import BusinessDevelopmentActivities
+from ..model.entity import Entity
+from ..model.campaign import Campaign
 
 
 class PostGreDataLoader:
@@ -10,6 +16,7 @@ class PostGreDataLoader:
 
     def __init__(self):
         self.props = PropertiesReader.get_properties_file_as_dict()
+        self.input_from_csv = CsvDataLoader().get_input_rows_as_dict()
         self.conn = None
 
     def connect_to_pgsql(self):
@@ -32,4 +39,19 @@ class PostGreDataLoader:
             cursor.execute(sql.format(x))
             self.all_campaigns.extend(cursor.fetchall())
 
-        print(self.all_campaigns)
+        for nip in self.input_from_csv:
+
+            for campaign_row in self.all_campaigns:
+
+                if nip == campaign_row[2]:
+
+                    campaign = Campaign(campaign_id=campaign_row[0],
+                                        campaign_name=campaign_row[1],
+                                        nip=campaign_row[2],
+                                        name=campaign_row[3],
+                                        last_call=campaign_row[4],
+                                        last_comment=[5])
+                    self.input_from_csv[nip].campaigns.append(campaign)
+
+
+        #print(self.all_campaigns)
