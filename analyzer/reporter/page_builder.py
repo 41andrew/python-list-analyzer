@@ -60,6 +60,19 @@ class HtmlPageBuilder:
         return output
 
     @staticmethod
+    def add_collapsible_page_element(tag="div", id="", css_class="collapse", indent_level=0, text=""):
+        output = HtmlPageBuilder.open_tag(tag, id, css_class, indent_level)
+        output += HtmlPageBuilder.add_text(text, indent_level + 1)
+        output += HtmlPageBuilder.close_tag(tag, indent_level)
+        return output
+
+    @staticmethod
+    def add_button(tag="button", css_class="", data_toggle="", data_target="", text=""):
+        output = HtmlPageBuilder.open_tag(tag, css_class, data_toggle, data_target)
+        output += HtmlPageBuilder.add_text(text)
+        output += HtmlPageBuilder.close_tag(tag)
+
+    @staticmethod
     def build_table_header(table_data, tag, indent_level):
         output = HtmlPageBuilder.open_tag('tr', '', indent_level)
 
