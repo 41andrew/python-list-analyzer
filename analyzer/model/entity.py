@@ -12,7 +12,7 @@ class Entity(BaseRow):
         description(str):
     """
 
-    entity_not_in_capital_group = ["", "OTHER", "NONE"]
+    entity_not_in_capital_group = ["", "Other", "none34 "]
     descriptions_for_category_3 = ["audit restricted client - PL Secondary approval",
                                    "audit restricted client - PL SLP assigned",
                                    "audit restricted client - SLP assigned",
@@ -30,7 +30,7 @@ class Entity(BaseRow):
         return "[{0.nip}][{0.national_account}][{0.entity_name}][{0.description}]".format(self)
 
     def is_in_capital_group(self):
-        return self.national_account.upper() not in Entity.entity_not_in_capital_group
+        return self.national_account not in Entity.entity_not_in_capital_group
 
     def is_restricted(self):
         return self.description in Entity.descriptions_for_category_3
