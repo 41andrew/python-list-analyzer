@@ -16,8 +16,13 @@ class PostGreDataLoader:
 
     def __init__(self):
         self.props = PropertiesReader.get_properties_file_as_dict()
-        self.input_from_csv = CsvDataLoader().get_input_rows_as_dict()
+        # Tutaj nadpisywales input
+        # self.input_from_csv = CsvDataLoader().get_input_rows_as_dict()
+        self.input_from_csv = {}
         self.conn = None
+
+    def set_input_from_csv(self, input_from_crm):
+        self.input_from_csv = input_from_crm
 
     def connect_to_pgsql(self):
         try:
