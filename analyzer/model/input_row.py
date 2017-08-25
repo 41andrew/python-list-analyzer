@@ -14,6 +14,7 @@ class InputRow(BaseRow):
         engagements(list): list of entity engagements
         proposals(list): list of entity proposals
         bda(list): list of entity bda
+        campaigns(list): list of entity's campaigns
     """
 
     COLUMN_NAMES = ["NAME", "NIP", "NAME_IN_CRM", "CATEGORY"]
@@ -79,6 +80,14 @@ class InputRow(BaseRow):
 
         return all_bda_data
 
+    def get_campaign_column_values(self):
+        all_campaign_data = []
+
+        for campaign in self.campaigns:
+            campaign_data = campaign.get_column_values_as_list()
+            all_campaign_data.append(campaign_data)
+
+        return all_campaign_data
 
 class Category(Enum):
 

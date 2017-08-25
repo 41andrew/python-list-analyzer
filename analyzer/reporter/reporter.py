@@ -4,6 +4,7 @@ from ..model.input_row import InputRow
 from ..model.engagement import Engagement
 from ..model.proposal import Proposal
 from ..model.bda import BusinessDevelopmentActivities
+from ..model.campaign import Campaign
 
 
 class Reporter:
@@ -125,14 +126,18 @@ class HtmlReporter(Reporter):
     def __build_detailed_data_about_one_row_and_its_collections(self, input_row):
         self.__page_content += HtmlPageBuilder.add_page_element('h3', 'text-left', 2, 'NIP : {}'.format(input_row.nip))
 
-        if input_row.has_any_engagements():
-            self.__build_category_table('Engagements : ', Engagement.COLUMN_NAMES,
+        #if input_row.has_any_engagements():
+        self.__build_category_table('Engagements : ', Engagement.COLUMN_NAMES,
                                         input_row.get_engagements_column_values())
 
-        if input_row.has_any_proposals():
-            self.__build_category_table('Proposals : ', Proposal.COLUMN_NAMES,
+        #if input_row.has_any_proposals():
+        self.__build_category_table('Proposals : ', Proposal.COLUMN_NAMES,
                                         input_row.get_proposals_column_values())
 
-        if input_row.has_any_bdas():
-            self.__build_category_table('BDA : ', BusinessDevelopmentActivities.COLUMN_NAMES,
+        #if input_row.has_any_bdas():
+        self.__build_category_table('BDA : ', BusinessDevelopmentActivities.COLUMN_NAMES,
                                         input_row.get_bda_column_values())
+
+        self.__build_category_table('Campaigns : ', Campaign.COLUMN_NAMES,
+                                    input_row.get_campaign_column_data())
+
