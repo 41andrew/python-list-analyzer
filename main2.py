@@ -11,19 +11,18 @@ if __name__ == "__main__":
 
     data_writer = CsvDataWriter()
     # Opening connection to postgres database
-    #pgs_loader = PostGreDataLoader()
-
+    pgs_loader = PostGreDataLoader()
     # Opening connection to CRM
     crm_loader = CrmDataLoader()
-
-    # Loading data from postgres database
-    #pgs_loader.load_data_from_pgs()
 
     context = InputRowsCategoryAssignmentContext()
     strategy = EngagementStrategy()
 
+
     # Loading data from CRM
     crm_loader.load_data_from_crm2()
+    # Loading data from postgres database
+    pgs_loader.load_data_from_pgs()
 
     # Currently used strategy
     context.strategy = strategy

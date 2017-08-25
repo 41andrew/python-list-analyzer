@@ -246,4 +246,5 @@ class CampaignStrategy(CategoryAssignmentStrategy):
             print("input_row with NIP [{}] has campaigns".format(input_row.nip))
             input_row.category = Category.TO_CHECK
         else:
+
             pass
