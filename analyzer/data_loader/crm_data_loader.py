@@ -6,6 +6,7 @@ from ..model.relationship import Relationship
 from ..model.bda import BusinessDevelopmentActivities
 from ..model.entity import Entity
 from ..model.restricted_services import RestrictedServices
+from ..reporter.reporter import HtmlReporter
 
 
 class CrmDataLoader:
@@ -20,6 +21,7 @@ class CrmDataLoader:
         self.conn = None
         self.input_from_csv = CsvDataLoader().get_input_rows_as_dict()
         self.connect_to_crm()
+        self.engagements_date = '2015'
 
     def connect_to_crm(self):
 
@@ -72,7 +74,7 @@ class CrmDataLoader:
 
         cursor = self.conn.cursor()
 
-        sql = """SELECT en.TaxNumber, na.NationalAccount, en.EntityName, cl.Description, eg.Engagement_ID, eg.EngagementName, CONCAT(em.LastName, ' ', em.FirstName) AS 'EngagementPartner', eg.CreateDate, es.Status
+        sql = """SELECT en.TaxNumber, na.NationalAccount, en.EntityName, cl.Description, eg.EngagementCode, eg.EngagementName, CONCAT(em.LastName, ' ', em.FirstName) AS 'EngagementPartner', eg.CreateDate, es.Status
               FROM ems.v_Engagement eg INNER JOIN
                         ems.v_Entity en ON eg.Entity_ID = en.Entity_ID LEFT JOIN
                         ems.v_NationalAccount na ON en.NationalAccount_ID = na.NationalAccount_ID INNER JOIN
@@ -234,6 +236,8 @@ class CrmDataLoader:
         #print (self.crm_bda)
 
     def load_data_from_crm2(self):
+
+
 
         for nip in self.input_from_csv:
 

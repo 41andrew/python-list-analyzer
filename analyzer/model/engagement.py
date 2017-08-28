@@ -15,7 +15,7 @@ class Engagement(BaseRow):
         status(EngagementStatus):
     """
 
-    COLUMN_NAMES = ["NIP", "NATIONAL_ACCOUNT", "ENTITY_NAME", "DESCRIPTION","ENGAGEMENT_CODE", "ENGAGEMENT_NAME",
+    COLUMN_NAMES = ["NIP", "NATIONAL_ACCOUNT", "ENTITY_NAME", "DESCRIPTION","CODE", "ENGAGEMENT_NAME",
                     "ENGAGEMENT_PARTNER", "CREATE_DATE", "STATUS"]
 
     def __init__(self, entity, engagement_code, engagement_name,

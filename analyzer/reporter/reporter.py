@@ -19,6 +19,7 @@ class Reporter:
         self.not_accepted_count = 0
         self.execution_time = 0
         self.column_id = 0
+        self.engagement_year = 0
 
     def set_report_result(self, input_rows):
         self.input_rows = input_rows
@@ -30,6 +31,9 @@ class Reporter:
 
     def set_execution_time(self, execution_time):
         self.execution_time = execution_time
+
+    def set_engagement_year(self, engagement_year):
+        self.engagement_year = engagement_year
 
     @staticmethod
     def __is_category_not_assigned(row):
@@ -135,10 +139,10 @@ class HtmlReporter(Reporter):
         self.__page_content += ("""<div class="panel panel-default">
                                     <div class="panel-heading">
                                         <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse{}">{}</a>
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse{} - {}">{}</a>
                                         </h4>
                                     </div>
-                                    <div id="collapse{}" class="panel-collapse collapse in">""".format(self.column_id, input_row.nip, self.column_id))
+                                    <div id="collapse{}" class="panel-collapse collapse">""".format(self.column_id, input_row.nip, input_row.company_name_in_crm, self.column_id))
 
         self.__page_content += HtmlPageBuilder.add_page_element('h3', 'text-left', 2, 'Entity: {} NIP: {}'.format(input_row.name, input_row.nip))
 
@@ -164,4 +168,6 @@ class HtmlReporter(Reporter):
                                     input_row.get_restricted_services_column_values())
 
         self.__page_content += """</div></div>"""
+
+        self.column_id += 1
 
