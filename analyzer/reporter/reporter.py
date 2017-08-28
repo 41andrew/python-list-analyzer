@@ -139,7 +139,7 @@ class HtmlReporter(Reporter):
         self.__page_content += ("""<div class="panel panel-default">
                                     <div class="panel-heading">
                                         <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse{} - {}">{}</a>
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse{}">{} - {}</a>
                                         </h4>
                                     </div>
                                     <div id="collapse{}" class="panel-collapse collapse">""".format(self.column_id, input_row.nip, input_row.company_name_in_crm, self.column_id))
