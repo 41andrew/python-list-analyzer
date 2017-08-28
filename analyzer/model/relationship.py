@@ -4,7 +4,7 @@ from .base_row import BaseRow
 class Relationship(BaseRow):
     """
     Class used to represent relationship row from database
-    
+
     """
 
     COLUMN_NAMES = ["NIP", "ENTITY_NAME", "CONTACT_NAME", "KPMG_EMPLOYEE", "RELATIONSHIP"]

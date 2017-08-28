@@ -6,6 +6,7 @@ from ..model.proposal import Proposal
 from ..model.bda import BusinessDevelopmentActivities
 from ..model.campaign import Campaign
 from ..model.relationship import Relationship
+from ..model.restricted_services import RestrictedServices
 
 
 class Reporter:
@@ -127,7 +128,7 @@ class HtmlReporter(Reporter):
     def __build_detailed_data_about_one_row_and_its_collections(self, input_row):
 
         # nie dziala - self.__page_content += HtmlPageBuilder.add_button(css_class='btn btn-info', data_toggle='collapse', data_target='#demo', text='button')
-        self.__page_content += HtmlPageBuilder.add_page_element('h3', 'demo', 'text-left', 2, 'Entity: {} NIP: {}'.format(input_row.name, input_row.nip))
+        self.__page_content += HtmlPageBuilder.add_page_element('h3', 'text-left', 2, 'Entity: {} NIP: {}'.format(input_row.name, input_row.nip))
 
         #if input_row.has_any_engagements():
         self.__build_category_table('Engagements : ', Engagement.COLUMN_NAMES,
@@ -146,4 +147,7 @@ class HtmlReporter(Reporter):
 
         self.__build_category_table('Relationships : ', Relationship.COLUMN_NAMES,
                                     input_row.get_relationship_column_values())
+
+        self.__build_category_table('Restricted Services :', RestrictedServices.COLUMN_NAMES,
+                                    input_row.get_restricted_services_column_values())
 

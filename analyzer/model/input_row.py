@@ -30,6 +30,7 @@ class InputRow(BaseRow):
         self.bda = []
         self.campaigns = []
         self.relationships = []
+        self.restricted_services = []
 
     def __str__(self):
         return "[{0.name}][{0.nip}][{0.category}][{0.company_name_in_crm}]".format(self)
@@ -48,6 +49,9 @@ class InputRow(BaseRow):
 
     def has_any_relationships(self):
         return len(self.relationships) != 0
+
+    def has_any_restricted_services(self):
+        return len(self.restricted_services) != 0
 
     def is_entity_name_same_as_crm_name(self, entity_name):
         return entity_name.upper() == self.company_name_in_crm.upper()
@@ -102,6 +106,15 @@ class InputRow(BaseRow):
             all_relationship_data.append(relationship_data)
 
         return all_relationship_data
+
+    def get_restricted_services_column_values(self):
+        all_restricted_services_data = []
+
+        for restricted in self.restricted_services:
+            restricted_data = restricted.get_column_values_as_list()
+            all_restricted_services_data.append(restricted_data)
+
+        return all_restricted_services_data
 
 class Category(Enum):
 

@@ -5,6 +5,7 @@ from ..model.proposal import Proposal
 from ..model.relationship import Relationship
 from ..model.bda import BusinessDevelopmentActivities
 from ..model.entity import Entity
+from ..model.restricted_services import RestrictedServices
 
 
 class CrmDataLoader:
@@ -35,7 +36,7 @@ class CrmDataLoader:
 
         sql = """SELECT en.EntityName
                 FROM ems.v_Entity en
-                WHERE en.TaxNumber = '{}'"""
+                WHERE en.TaxNumber = N'{}'"""
 
         cursor.execute(sql.format(nip))
 
@@ -190,6 +191,21 @@ class CrmDataLoader:
         cursor.execute(sql.format(nip))
         return cursor.fetchall()
 
+    def find_restricted_services(self, nip):
+
+        cursor = self.conn.cursor()
+
+        sql = """SELECT en.TaxNumber, en.entityName, COUNT(gt.GTOST) AS 'ilosc restricted services'
+                    FROM ems.v_Entity en INNER JOIN
+                                    ems.v_RestrictedServices rs ON en.Entity_ID = rs.Entity_ID INNER JOIN
+                                    ems.v_GTOST gt ON rs.GTOST_ID = gt.GTOST_ID
+                    WHERE en.IsActive = 'TRUE' AND en.TaxNumber = N'{}'
+                    GROUP BY EntityName, TaxNumber
+                    HAVING COUNT(gt.GTOST) = 5 OR COUNT(gt.GTOST) = 6"""
+
+        cursor.execute(sql.format(nip))
+        return cursor.fetchall()
+
     def load_data_from_crm(self):
 
         self.connect_to_crm()
@@ -235,6 +251,14 @@ class CrmDataLoader:
                                                 kpmg_employee=relationship_row[3],
                                                 relationship=relationship_row[4])
                     self.input_from_csv[nip].relationships.append(relationship)
+
+                restricted_services_from_db = self.find_restricted_services(nip)
+
+                for restricted_row in restricted_services_from_db:
+                    restricted = RestrictedServices(nip=restricted_row[0],
+                                                    entity_name=restricted_row[1],
+                                                    count=restricted_row[2])
+                    self.input_from_csv[nip].restricted_services.append(restricted)
 
 
                 if (grupa in self.no_national_account) or (not grupa):
