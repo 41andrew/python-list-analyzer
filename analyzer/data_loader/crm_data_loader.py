@@ -2,6 +2,7 @@ import pyodbc
 from .data_loader import CsvDataLoader
 from ..model.engagement import Engagement
 from ..model.proposal import Proposal
+from ..model.relationship import Relationship
 from ..model.bda import BusinessDevelopmentActivities
 from ..model.entity import Entity
 
@@ -173,6 +174,22 @@ class CrmDataLoader:
         cursor.execute(sql.format(nip))
         return cursor.fetchall()
 
+    def find_relationship(self, nip):
+
+        cursor = self.conn.cursor()
+
+        sql = """SELECT en.TaxNumber, en.EntityName, CONCAT(co.FirstName, ' ', co.LastName), CONCAT(em.FirstName, ' ', em.LastName), cr.ContactRelationship
+                    FROM ems.v_Entity en INNER JOIN
+                                    ems.v_Occupation oc ON en.Entity_ID = oc.Entity_ID INNER JOIN
+                                    ems.v_Contact co ON oc.Contact_ID = co.Contact_ID INNER JOIN
+                                    ems.v_ContactDepContact cdc ON co.Contact_ID = cdc.Contact_ID INNER JOIN
+                                    ems.v_Employee em ON cdc.Employee_ID = em.Employee_ID LEFT JOIN
+                                    ems.v_ContactRelationship cr ON cdc.ContactRelationship_ID = cr.ContactRelationship_ID
+                    WHERE cr.ContactRelationship = 'High' AND co.FirstName <> 'Other' AND co.FirstName <> 'Markets' AND en.TaxNumber = N'{}'"""
+
+        cursor.execute(sql.format(nip))
+        return cursor.fetchall()
+
     def load_data_from_crm(self):
 
         self.connect_to_crm()
@@ -180,6 +197,7 @@ class CrmDataLoader:
         for nip in self.input_nips:
 
             grupa = self.find_nationalaccount_for_input_nip(nip)
+
 
             if (grupa in self.no_national_account) or (not grupa):
                 self.input_nips2[nip].engagements = self.find_engagements_for_nip(nip)
@@ -207,6 +225,18 @@ class CrmDataLoader:
             is_in_crm = self.is_nip_in_crm(nip)
 
             if is_in_crm:
+
+                relationships_from_db = self.find_relationship(nip)
+
+                for relationship_row in relationships_from_db:
+                    relationship = Relationship(nip=relationship_row[0],
+                                                entity_name=relationship_row[1],
+                                                contact_name=relationship_row[2],
+                                                kpmg_employee=relationship_row[3],
+                                                relationship=relationship_row[4])
+                    self.input_from_csv[nip].relationships.append(relationship)
+
+
                 if (grupa in self.no_national_account) or (not grupa):
                     engagements_from_db  = self.find_engagements_for_nip(nip)
                     proposals_from_db = self.find_proposals_for_nip(nip)
@@ -297,4 +327,4 @@ class CrmDataLoader:
                                                             category=bda_row[9])
                         self.input_from_csv[nip].bda.append(bda)
             else:
-                print("NIPu {} nie ma w CRMie, nie tworzę obiektu".format(nip))
+                print("NIPu {} nie ma w CRMie".format(nip))

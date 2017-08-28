@@ -5,6 +5,7 @@ from ..model.engagement import Engagement
 from ..model.proposal import Proposal
 from ..model.bda import BusinessDevelopmentActivities
 from ..model.campaign import Campaign
+from ..model.relationship import Relationship
 
 
 class Reporter:
@@ -142,4 +143,7 @@ class HtmlReporter(Reporter):
 
         self.__build_category_table('Campaigns : ', Campaign.COLUMN_NAMES,
                                     input_row.get_campaign_column_values())
+
+        self.__build_category_table('Relationships : ', Relationship.COLUMN_NAMES,
+                                    input_row.get_relationship_column_values())
 

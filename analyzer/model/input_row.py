@@ -15,6 +15,7 @@ class InputRow(BaseRow):
         proposals(list): list of entity proposals
         bda(list): list of entity bda
         campaigns(list): list of entity's campaigns
+        relationship(list): list of entity's relationships with status: HIGH
     """
 
     COLUMN_NAMES = ["NAME", "NIP", "NAME_IN_CRM", "CATEGORY"]
@@ -28,6 +29,7 @@ class InputRow(BaseRow):
         self.proposals = []
         self.bda = []
         self.campaigns = []
+        self.relationships = []
 
     def __str__(self):
         return "[{0.name}][{0.nip}][{0.category}][{0.company_name_in_crm}]".format(self)
@@ -43,6 +45,9 @@ class InputRow(BaseRow):
 
     def has_any_campaigns(self):
         return len(self.campaigns) != 0
+
+    def has_any_relationships(self):
+        return len(self.relationships) != 0
 
     def is_entity_name_same_as_crm_name(self, entity_name):
         return entity_name.upper() == self.company_name_in_crm.upper()
@@ -88,6 +93,15 @@ class InputRow(BaseRow):
             all_campaign_data.append(campaign_data)
 
         return all_campaign_data
+
+    def get_relationship_column_values(self):
+        all_relationship_data = []
+
+        for relationship in self.relationships:
+            relationship_data = relationship.get_column_values_as_list()
+            all_relationship_data.append(relationship_data)
+
+        return all_relationship_data
 
 class Category(Enum):
 

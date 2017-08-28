@@ -246,5 +246,15 @@ class CampaignStrategy(CategoryAssignmentStrategy):
             print("input_row with NIP [{}] has campaigns".format(input_row.nip))
             input_row.category = Category.TO_CHECK
         else:
+            RelationshipStrategy().assign_category(input_row)
 
+class RelationshipStrategy(CategoryAssignmentStrategy):
+
+    def assign_category(self, input_row):
+        print("Checking relationships")
+
+        if input_row.has_any_relationships():
+            print("input_row with NIP [{}] has relationships with high status".format(input_row.nip))
+            input_row.category = Category.TO_CHECK
+        else:
             pass
