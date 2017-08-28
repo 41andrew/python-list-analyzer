@@ -18,6 +18,7 @@ class Reporter:
         self.to_check_count = 0
         self.not_accepted_count = 0
         self.execution_time = 0
+        self.column_id = 0
 
     def set_report_result(self, input_rows):
         self.input_rows = input_rows
@@ -122,12 +123,23 @@ class HtmlReporter(Reporter):
     def __build_detailed_data_about_rows_which_need_to_be_checked(self):
         self.__page_content += HtmlPageBuilder.add_page_element('h2', 'text-center', 2, 'Details about entities in category 2')
 
+        self.__page_content += """<div class="panel-group" id="accordion">"""
+
         for row in self._get_input_rows_with_given_category(Category.TO_CHECK, self.input_rows):
             self.__build_detailed_data_about_one_row_and_its_collections(row)
 
+        self.__page_content += """</div>"""
+
     def __build_detailed_data_about_one_row_and_its_collections(self, input_row):
 
-        # nie dziala - self.__page_content += HtmlPageBuilder.add_button(css_class='btn btn-info', data_toggle='collapse', data_target='#demo', text='button')
+        self.__page_content += ("""<div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse{}">{}</a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapse{}" class="panel-collapse collapse in">""".format(self.column_id, input_row.nip, self.column_id))
+
         self.__page_content += HtmlPageBuilder.add_page_element('h3', 'text-left', 2, 'Entity: {} NIP: {}'.format(input_row.name, input_row.nip))
 
         #if input_row.has_any_engagements():
@@ -150,4 +162,6 @@ class HtmlReporter(Reporter):
 
         self.__build_category_table('Restricted Services :', RestrictedServices.COLUMN_NAMES,
                                     input_row.get_restricted_services_column_values())
+
+        self.__page_content += """</div></div>"""
 
