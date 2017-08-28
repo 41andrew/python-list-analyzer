@@ -234,7 +234,7 @@ class BDAStrategy(CategoryAssignmentStrategy):
             print("input_row with NIP [{}] has BDAa".format(input_row.nip))
             input_row.category = Category.TO_CHECK
         else:
-            RelationshipStrategy.assign_category(input_row)
+            RelationshipStrategy().assign_category(input_row)
 
 
 class CampaignStrategy(CategoryAssignmentStrategy):
@@ -246,7 +246,7 @@ class CampaignStrategy(CategoryAssignmentStrategy):
             print("input_row with NIP [{}] has campaigns".format(input_row.nip))
             input_row.category = Category.NOT_ACCEPTED
         else:
-            RestrictedServicesStrategy.assign_category(input_row)
+            RestrictedServicesStrategy().assign_category(input_row)
 
 class RelationshipStrategy(CategoryAssignmentStrategy):
 
