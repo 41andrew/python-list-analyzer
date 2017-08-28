@@ -257,7 +257,7 @@ class RelationshipStrategy(CategoryAssignmentStrategy):
             print("input_row with NIP [{}] has relationships with high status".format(input_row.nip))
             input_row.category = Category.TO_CHECK
         else:
-            RestrictedServicesStrategy().assign_category(input_row)
+            pass
 
 class RestrictedServicesStrategy(CategoryAssignmentStrategy):
 
