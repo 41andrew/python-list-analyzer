@@ -12,7 +12,7 @@ class Entity(BaseRow):
         description(str):
     """
 
-    entity_not_in_capital_group = ["", "Other", "none34 "]
+    entity_not_in_capital_group = ["", "Other", "none"]
     descriptions_for_category_3 = ["audit restricted client - PL Secondary approval",
                                    "audit restricted client - PL SLP assigned",
                                    "audit restricted client - SLP assigned",

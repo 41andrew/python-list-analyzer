@@ -5,6 +5,7 @@ from analyzer.calculations.strategy import InputRowsCategoryAssignmentContext
 from analyzer.data_loader.data_loader import CsvDataLoader
 from analyzer.data_writer.data_writer import CsvDataWriter
 from analyzer.utilities.properties_reader import PropertiesReader
+from analyzer.calculations.strategy import RestrictedServicesStrategy
 
 
 if __name__ == "__main__":
@@ -16,7 +17,7 @@ if __name__ == "__main__":
     crm_loader = CrmDataLoader()
 
     context = InputRowsCategoryAssignmentContext()
-    strategy = EngagementStrategy()
+    strategy = RestrictedServicesStrategy()
 
 
     # Loading data from CRM

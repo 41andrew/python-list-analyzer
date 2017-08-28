@@ -268,4 +268,4 @@ class RestrictedServicesStrategy(CategoryAssignmentStrategy):
             print("input_row with NIP [{}] has restricted services".format(input_row.nip))
             input_row.category = Category.NOT_ACCEPTED
         else:
-            pass
+            EngagementStrategy().assign_category(input_row)
