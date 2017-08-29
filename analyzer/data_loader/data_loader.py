@@ -154,8 +154,7 @@ class CsvDataLoader:
             line = line.strip('\n').split(sep=';')
             if file_path_key_in_dict == "input_file_source":
                 input_entity = InputRow(line[0],
-                                        line[1],
-                                        line[2])
+                                        line[1])
                 return input_entity
 
             else:
