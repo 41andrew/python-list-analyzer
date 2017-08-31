@@ -58,7 +58,7 @@ class CsvDataLoader:
         print("Actually reading file : {}".format(os.path.abspath(self.data_paths[file_path_key])))
 
         try:
-            with open(self.data_paths[file_path_key], 'r', encoding='UTF-8', errors='ignore') as source_file:
+            with open(self.data_paths[file_path_key], 'r', encoding='windows-1250', errors='ignore') as source_file:
                 return source_file.readlines()
         except FileNotFoundError as e:
             print(e)

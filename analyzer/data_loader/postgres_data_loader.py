@@ -24,6 +24,8 @@ class PostGreDataLoader:
         # self.input_from_csv = CsvDataLoader().get_input_rows_as_dict()
         self.input_from_csv = {}
         self.conn = None
+        self.start_date = input("Podaj datę początkową kampanii w formacie YYYY-MM-DD")
+        self.end_date = input("Podaj datę końcową kampanii YYYY-MM-DD")
 
     def set_input_from_csv(self, input_from_crm):
         self.input_from_csv = input_from_crm
@@ -42,10 +44,10 @@ class PostGreDataLoader:
 
         cursor = self.conn.cursor()
 
-        sql = """SELECT * FROM "Custom"."GetRecordsToExport"(({}), '2017-08-01', '2017-08-10')"""
+        sql = """SELECT * FROM "Custom"."GetRecordsToExport"((?), (?), (?))"""
 
         for x in self.CAMPAIGN_ID_LIST:
-            cursor.execute(sql.format(x))
+            cursor.execute(sql, x, self.start_date, self.end_date)
             self.all_campaigns.extend(cursor.fetchall())
 
         for nip in self.input_from_csv:

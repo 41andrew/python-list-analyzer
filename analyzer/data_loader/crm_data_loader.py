@@ -20,7 +20,9 @@ class CrmDataLoader:
         self.conn = None
         self.input_from_csv = CsvDataLoader().get_input_rows_as_dict()
         self.connect_to_crm()
-        self.engagements_date = '2015'
+        self.engagements_date = input("Od którego roku chcesz brać pod uwagę engagementy?")
+        self.proposals_date = input("Od którego roku chcesz brać pod uwagę proposale?")
+        self.bd_date = input("Od którego roku chcesz brać pod uwagę BDA?")
 
     def connect_to_crm(self):
 
@@ -81,10 +83,10 @@ class CrmDataLoader:
                         ems.v_CustomList cl ON ea.SentinelCategory_ID = cl.CustomList_ID LEFT JOIN
                         ems.v_Employee em ON eg.EngagementPartner_ID = em.Employee_ID INNER JOIN
                         ems.v_EngagementStatus es ON eg.EngagementStatus_ID = es.EngagementStatus_ID
-              WHERE na.NationalAccount = (?) AND eg.CreateDate >= '2015'
+              WHERE na.NationalAccount = (?) AND eg.CreateDate >= (?)
 				"""
 
-        cursor.execute(sql, account)
+        cursor.execute(sql, account, self.engagements_date)
 
         return cursor.fetchall()
 
@@ -100,9 +102,9 @@ class CrmDataLoader:
                                     ems.v_CustomList cl ON ea.SentinelCategory_ID = cl.CustomList_ID LEFT JOIN
                                     ems.v_Employee em ON pr.KpmgContact_ID = em.Employee_ID INNER JOIN
                                     ems.v_ProposalStatus ps ON pr.ProposalStatus_ID = ps.ProposalStatus_ID
-                    WHERE na.NationalAccount = (?) AND pr.CreateDate >= '2017'"""
+                    WHERE na.NationalAccount = (?) AND pr.CreateDate >= (?)"""
 
-        cursor.execute(sql, account)
+        cursor.execute(sql, account, self.proposals_date)
 
         return cursor.fetchall()
 
@@ -118,9 +120,9 @@ class CrmDataLoader:
                                     ems.v_CustomList cl ON ea.SentinelCategory_ID = cl.CustomList_ID  LEFT JOIN
                                     ems.v_Employee em ON bd.Employee_ID = em.Employee_ID INNER JOIN
                                     ems.v_BDActivityCategory bdc ON bd.BDActivityCategory_ID = bdc.BDActivityCategory_ID
-                    WHERE na.NationalAccount = (?) AND bd.ActivityDate >= '2017'"""
+                    WHERE na.NationalAccount = (?) AND bd.ActivityDate >= (?)"""
 
-        cursor.execute(sql, account)
+        cursor.execute(sql, account, self.bd_date)
 
         return cursor.fetchall()
 
@@ -136,10 +138,10 @@ class CrmDataLoader:
                                 ems.v_CustomList cl ON ea.SentinelCategory_ID = cl.CustomList_ID LEFT JOIN
                                 ems.v_Employee em ON eg.EngagementPartner_ID = em.Employee_ID INNER JOIN
                                 ems.v_EngagementStatus es ON eg.EngagementStatus_ID = es.EngagementStatus_ID
-                      WHERE en.TaxNumber = (?) AND eg.CreateDate >= '2017'
+                      WHERE en.TaxNumber = (?) AND eg.CreateDate >= (?)
         				"""
 
-        cursor.execute(sql, nip)
+        cursor.execute(sql, nip, self.engagements_date)
         return cursor.fetchall()
 
     def find_proposals_for_nip(self, nip):
@@ -154,9 +156,9 @@ class CrmDataLoader:
                                     ems.v_CustomList cl ON ea.SentinelCategory_ID = cl.CustomList_ID LEFT JOIN
                                     ems.v_Employee em ON pr.KpmgContact_ID = em.Employee_ID INNER JOIN
                                     ems.v_ProposalStatus ps ON pr.ProposalStatus_ID = ps.ProposalStatus_ID
-                    WHERE en.TaxNumber = (?) AND pr.CreateDate >= '2017'"""
+                    WHERE en.TaxNumber = (?) AND pr.CreateDate >= (?)"""
 
-        cursor.execute(sql, nip)
+        cursor.execute(sql, nip, self.proposals_date)
         return cursor.fetchall()
 
     def find_bda_for_nip(self, nip):
@@ -171,9 +173,9 @@ class CrmDataLoader:
                                     ems.v_CustomList cl ON ea.SentinelCategory_ID = cl.CustomList_ID  LEFT JOIN
                                     ems.v_Employee em ON bd.Employee_ID = em.Employee_ID INNER JOIN
                                     ems.v_BDActivityCategory bdc ON bd.BDActivityCategory_ID = bdc.BDActivityCategory_ID
-                    WHERE en.TaxNumber = (?) AND bd.ActivityDate >= '2017'"""
+                    WHERE en.TaxNumber = (?) AND bd.ActivityDate >= (?)"""
 
-        cursor.execute(sql, nip)
+        cursor.execute(sql, nip, self.bd_date)
         return cursor.fetchall()
 
     def find_relationship(self, nip):
