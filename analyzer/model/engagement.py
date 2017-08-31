@@ -23,7 +23,7 @@ class Engagement(BaseRow):
 
         self.entity = entity
         self.engagement_code = engagement_code
-        self.engagement_name = (engagement_name).encode('windows-1250', 'ignore').decode('windows-1250')
+        self.engagement_name = engagement_name
         self.engagement_partner = engagement_partner
         self.create_date = create_date
         self.status = status

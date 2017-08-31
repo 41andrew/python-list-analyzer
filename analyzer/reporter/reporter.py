@@ -83,7 +83,7 @@ class HtmlReporter(Reporter):
     def create_report_page(self):
         page_path = self.__output_file_path.format(self.__output_directory, self.__page_name)
 
-        with open(page_path, 'w') as report_page:
+        with open(page_path, 'w', encoding="UTF-8") as report_page:
             print(self.__build_page_content(), file=report_page)
 
     def __build_page_content(self):
@@ -146,15 +146,12 @@ class HtmlReporter(Reporter):
 
         self.__page_content += HtmlPageBuilder.add_page_element('h3', 'text-left', 2, 'Entity: {} NIP: {}'.format(input_row.name, input_row.nip))
 
-        #if input_row.has_any_engagements():
         self.__build_category_table('Engagements : ', Engagement.COLUMN_NAMES,
                                         input_row.get_engagements_column_values())
 
-        #if input_row.has_any_proposals():
         self.__build_category_table('Proposals : ', Proposal.COLUMN_NAMES,
                                         input_row.get_proposals_column_values())
 
-        #if input_row.has_any_bdas():
         self.__build_category_table('BDA : ', BusinessDevelopmentActivities.COLUMN_NAMES,
                                         input_row.get_bda_column_values())
 

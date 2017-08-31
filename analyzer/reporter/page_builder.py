@@ -5,7 +5,7 @@ class HtmlPageBuilder:
 <!DOCTYPE html>
 <html lang="en">
 <head lang=en>
-    <meta charset="windows-1250">
+    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Report</title>

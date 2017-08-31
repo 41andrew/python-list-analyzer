@@ -22,7 +22,7 @@ class Proposal(BaseRow):
     def __init__(self, entity, proposal_id, proposal_name, proposal_partner, create_date, status):
         self.entity = entity
         self.proposal_id = proposal_id
-        self.proposal_name = (proposal_name).encode('windows-1250', 'ignore').decode('windows-1250')
+        self.proposal_name = proposal_name
         self.proposal_partner = proposal_partner
         self.create_date = create_date
         self.status = status

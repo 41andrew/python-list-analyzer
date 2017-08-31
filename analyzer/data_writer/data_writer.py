@@ -20,7 +20,7 @@ class CsvDataWriter:
 
         file_path = self.__output_file_path.format(self.__output_directory, file_name)
 
-        with open(file_path, 'w') as output_file:
+        with open(file_path, 'w', encoding="UTF-8") as output_file:
             for row in self.__input_rows:
 
                 if row.category == Category.TO_CHECK:

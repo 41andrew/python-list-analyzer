@@ -11,7 +11,6 @@ from ..reporter.reporter import HtmlReporter
 
 class CrmDataLoader:
 
-    input_nips = ['5252223038', '6491110585']
     no_national_account = ['none', 'Other']
     crm_engagements = []
     crm_proposals = []
@@ -38,9 +37,9 @@ class CrmDataLoader:
 
         sql = """SELECT en.EntityName
                 FROM ems.v_Entity en
-                WHERE en.TaxNumber = N'{}'"""
+                WHERE en.TaxNumber = (?)"""
 
-        cursor.execute(sql.format(nip))
+        cursor.execute(sql, nip)
 
         if cursor.rowcount != 0:
             print ("NIP {} jest w CRMie".format(nip))
@@ -56,9 +55,9 @@ class CrmDataLoader:
         sql = """SELECT na.NationalAccount
                 FROM ems.v_Entity en LEFT JOIN
                         ems.v_NationalAccount na ON na.NationalAccount_ID = en.NationalAccount_ID
-                WHERE en.TaxNumber = '{}'"""
+                WHERE en.TaxNumber = (?)"""
 
-        cursor.execute(sql.format(nip))
+        cursor.execute(sql, nip)
 
         # Pobieram nazwę grupy kapitałowej
 
@@ -82,10 +81,10 @@ class CrmDataLoader:
                         ems.v_CustomList cl ON ea.SentinelCategory_ID = cl.CustomList_ID LEFT JOIN
                         ems.v_Employee em ON eg.EngagementPartner_ID = em.Employee_ID INNER JOIN
                         ems.v_EngagementStatus es ON eg.EngagementStatus_ID = es.EngagementStatus_ID
-              WHERE na.NationalAccount = N'{}' AND eg.CreateDate >= '2015'
+              WHERE na.NationalAccount = (?) AND eg.CreateDate >= '2015'
 				"""
 
-        cursor.execute(sql.format(account))
+        cursor.execute(sql, account)
 
         return cursor.fetchall()
 
@@ -101,9 +100,9 @@ class CrmDataLoader:
                                     ems.v_CustomList cl ON ea.SentinelCategory_ID = cl.CustomList_ID LEFT JOIN
                                     ems.v_Employee em ON pr.KpmgContact_ID = em.Employee_ID INNER JOIN
                                     ems.v_ProposalStatus ps ON pr.ProposalStatus_ID = ps.ProposalStatus_ID
-                    WHERE na.NationalAccount = N'{}' AND pr.CreateDate >= '2017'"""
+                    WHERE na.NationalAccount = (?) AND pr.CreateDate >= '2017'"""
 
-        cursor.execute(sql.format(account))
+        cursor.execute(sql, account)
 
         return cursor.fetchall()
 
@@ -119,9 +118,9 @@ class CrmDataLoader:
                                     ems.v_CustomList cl ON ea.SentinelCategory_ID = cl.CustomList_ID  LEFT JOIN
                                     ems.v_Employee em ON bd.Employee_ID = em.Employee_ID INNER JOIN
                                     ems.v_BDActivityCategory bdc ON bd.BDActivityCategory_ID = bdc.BDActivityCategory_ID
-                    WHERE na.NationalAccount = N'{}' AND bd.ActivityDate >= '2017'"""
+                    WHERE na.NationalAccount = (?) AND bd.ActivityDate >= '2017'"""
 
-        cursor.execute(sql.format(account))
+        cursor.execute(sql, account)
 
         return cursor.fetchall()
 
@@ -137,10 +136,10 @@ class CrmDataLoader:
                                 ems.v_CustomList cl ON ea.SentinelCategory_ID = cl.CustomList_ID LEFT JOIN
                                 ems.v_Employee em ON eg.EngagementPartner_ID = em.Employee_ID INNER JOIN
                                 ems.v_EngagementStatus es ON eg.EngagementStatus_ID = es.EngagementStatus_ID
-                      WHERE en.TaxNumber = N'{}' AND eg.CreateDate >= '2017'
+                      WHERE en.TaxNumber = (?) AND eg.CreateDate >= '2017'
         				"""
 
-        cursor.execute(sql.format(nip))
+        cursor.execute(sql, nip)
         return cursor.fetchall()
 
     def find_proposals_for_nip(self, nip):
@@ -155,9 +154,9 @@ class CrmDataLoader:
                                     ems.v_CustomList cl ON ea.SentinelCategory_ID = cl.CustomList_ID LEFT JOIN
                                     ems.v_Employee em ON pr.KpmgContact_ID = em.Employee_ID INNER JOIN
                                     ems.v_ProposalStatus ps ON pr.ProposalStatus_ID = ps.ProposalStatus_ID
-                    WHERE en.TaxNumber = N'{}' AND pr.CreateDate >= '2017'"""
+                    WHERE en.TaxNumber = (?) AND pr.CreateDate >= '2017'"""
 
-        cursor.execute(sql.format(nip))
+        cursor.execute(sql, nip)
         return cursor.fetchall()
 
     def find_bda_for_nip(self, nip):
@@ -172,9 +171,9 @@ class CrmDataLoader:
                                     ems.v_CustomList cl ON ea.SentinelCategory_ID = cl.CustomList_ID  LEFT JOIN
                                     ems.v_Employee em ON bd.Employee_ID = em.Employee_ID INNER JOIN
                                     ems.v_BDActivityCategory bdc ON bd.BDActivityCategory_ID = bdc.BDActivityCategory_ID
-                    WHERE en.TaxNumber = N'{}' AND bd.ActivityDate >= '2017'"""
+                    WHERE en.TaxNumber = (?) AND bd.ActivityDate >= '2017'"""
 
-        cursor.execute(sql.format(nip))
+        cursor.execute(sql, nip)
         return cursor.fetchall()
 
     def find_relationship(self, nip):
@@ -188,9 +187,9 @@ class CrmDataLoader:
                                     ems.v_ContactDepContact cdc ON co.Contact_ID = cdc.Contact_ID INNER JOIN
                                     ems.v_Employee em ON cdc.Employee_ID = em.Employee_ID LEFT JOIN
                                     ems.v_ContactRelationship cr ON cdc.ContactRelationship_ID = cr.ContactRelationship_ID
-                    WHERE cr.ContactRelationship = 'High' AND co.FirstName <> 'Other' AND co.FirstName <> 'Markets' AND en.TaxNumber = N'{}'"""
+                    WHERE cr.ContactRelationship = 'High' AND co.FirstName <> 'Other' AND co.FirstName <> 'Markets' AND en.TaxNumber = (?)"""
 
-        cursor.execute(sql.format(nip))
+        cursor.execute(sql, nip)
         return cursor.fetchall()
 
     def find_restricted_services(self, nip):
@@ -201,11 +200,11 @@ class CrmDataLoader:
                     FROM ems.v_Entity en INNER JOIN
                                     ems.v_RestrictedServices rs ON en.Entity_ID = rs.Entity_ID INNER JOIN
                                     ems.v_GTOST gt ON rs.GTOST_ID = gt.GTOST_ID
-                    WHERE en.IsActive = 'TRUE' AND en.TaxNumber = N'{}'
+                    WHERE en.IsActive = 'TRUE' AND en.TaxNumber = (?)
                     GROUP BY EntityName, TaxNumber
                     HAVING COUNT(gt.GTOST) = 5 OR COUNT(gt.GTOST) = 6"""
 
-        cursor.execute(sql.format(nip))
+        cursor.execute(sql, nip)
         return cursor.fetchall()
 
     def get_crm_name(self, nip):
@@ -214,37 +213,10 @@ class CrmDataLoader:
 
         sql = """SELECT en.EntityName
                     FROM ems.v_Entity en
-                    WHERE en.TaxNumber = N'{}'"""
+                    WHERE en.TaxNumber = (?)"""
 
-        cursor.execute(sql.format(nip))
+        cursor.execute(sql, nip)
         return cursor.fetchall()
-
-    def load_data_from_crm(self):
-
-        self.connect_to_crm()
-
-        for nip in self.input_nips:
-
-            grupa = self.find_nationalaccount_for_input_nip(nip)
-
-
-            if (grupa in self.no_national_account) or (not grupa):
-                self.input_nips2[nip].engagements = self.find_engagements_for_nip(nip)
-                # self.find_engagements_for_nip(nip)
-                self.find_proposals_for_nip(nip)
-                self.find_bda_for_nip(nip)
-            else:
-                self.find_engagements_for_nationalaccount(grupa)
-                self.find_proposals_for_nationalaccount(grupa)
-                self.find_bda_for_nationalaccount(grupa)
-
-
-
-        #print (self.crm_engagements)
-        #print ("")
-        #print (self.crm_proposals)
-        #print ("")
-        #print (self.crm_bda)
 
     def load_data_from_crm2(self):
 
