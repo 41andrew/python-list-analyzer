@@ -19,6 +19,7 @@ class Reporter:
         self.not_accepted_count = 0
         self.execution_time = 0
         self.column_id = 0
+        self.engagement_year = 0
 
     def set_report_result(self, input_rows):
         self.input_rows = input_rows
@@ -113,6 +114,8 @@ class HtmlReporter(Reporter):
                                                                 .format(self.not_accepted_count))
         self.__page_content += HtmlPageBuilder.add_page_element('p', 'text-center', 3, "Execution time : {:.10f} s"
                                                                 .format(self.execution_time))
+        self.__page_content += HtmlPageBuilder.add_page_element('p', 'text-center', 3, "Engagement date: {}"
+                                                                .format(self.engagement_year))
         self.__page_content += HtmlPageBuilder.close_tag('div', 2)
 
     def __build_category_table(self, category_name, table_headers, table_data):
