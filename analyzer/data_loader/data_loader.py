@@ -4,6 +4,8 @@ from ..model.proposal import Proposal
 from ..model.bda import BusinessDevelopmentActivities
 from ..model.entity import Entity
 import os
+import tkinter as tk
+from tkinter import filedialog
 
 
 class CsvDataLoader:
@@ -18,6 +20,8 @@ class CsvDataLoader:
     """
 
     def __init__(self):
+        root = tk.Tk()
+        root.withdraw
         self.input_files_directory = "source_files"
         self.data_paths = {
             'input_file_source': "{}/input.csv".format(self.input_files_directory),
@@ -26,6 +30,7 @@ class CsvDataLoader:
             'input_file_proposals': "{}/proposals.csv".format(self.input_files_directory),
             'input_file_bda': "{}/bda.csv".format(self.input_files_directory)
         }
+        self.data_path_input = filedialog.askopenfilename()
         self.input_entities = {}
         self.error_messages = set([])
 
@@ -58,7 +63,7 @@ class CsvDataLoader:
         print("Actually reading file : {}".format(os.path.abspath(self.data_paths[file_path_key])))
 
         try:
-            with open(self.data_paths[file_path_key], 'r', encoding='windows-1250', errors='ignore') as source_file:
+            with open(self.data_path_input, 'r', encoding='windows-1250', errors='ignore') as source_file:
                 return source_file.readlines()
         except FileNotFoundError as e:
             print(e)
