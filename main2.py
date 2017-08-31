@@ -44,6 +44,10 @@ if __name__ == "__main__":
     data_writer.write_category_assignment_result_to_file('results.csv')
 
     context.reporter.engagement_year = crm_loader.engagements_date
+    context.reporter.proposal_year = crm_loader.proposals_date
+    context.reporter.bd_year = crm_loader.bd_date
+    context.reporter.campaign_start = pgs_loader.start_date
+    context.reporter.campaign_end = pgs_loader.end_date
 
     # Generate HTML report
     context.reporter.create_report_page()
