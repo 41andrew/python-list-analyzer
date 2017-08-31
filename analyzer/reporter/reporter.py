@@ -19,7 +19,6 @@ class Reporter:
         self.not_accepted_count = 0
         self.execution_time = 0
         self.column_id = 0
-        self.engagement_year = 0
 
     def set_report_result(self, input_rows):
         self.input_rows = input_rows

@@ -20,9 +20,9 @@ class CrmDataLoader:
         self.conn = None
         self.input_from_csv = CsvDataLoader().get_input_rows_as_dict()
         self.connect_to_crm()
-        self.engagements_date = input("Od którego roku chcesz brać pod uwagę engagementy?")
-        self.proposals_date = input("Od którego roku chcesz brać pod uwagę proposale?")
-        self.bd_date = input("Od którego roku chcesz brać pod uwagę BDA?")
+        self.engagements_date = input("Od którego roku chcesz brać pod uwagę engagementy?\n")
+        self.proposals_date = input("Od którego roku chcesz brać pod uwagę proposale?\n")
+        self.bd_date = input("Od którego roku chcesz brać pod uwagę BDA?\n")
 
     def connect_to_crm(self):
 
