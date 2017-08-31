@@ -30,7 +30,7 @@ class CsvDataLoader:
             'input_file_proposals': "{}/proposals.csv".format(self.input_files_directory),
             'input_file_bda': "{}/bda.csv".format(self.input_files_directory)
         }
-        self.data_path_input = filedialog.askopenfilename()
+        self.data_path_input = filedialog.askopenfilename(title='Wybierz plik z danymi do weryfikacji', filetypes=(('csv files', '*.csv'),))
         self.input_entities = {}
         self.error_messages = set([])
 

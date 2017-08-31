@@ -7,6 +7,8 @@ from ..model.bda import BusinessDevelopmentActivities
 from ..model.campaign import Campaign
 from ..model.relationship import Relationship
 from ..model.restricted_services import RestrictedServices
+import tkinter as tk
+from tkinter import filedialog
 
 
 class Reporter:
@@ -79,9 +81,11 @@ class HtmlReporter(Reporter):
 
     def __init__(self):
         super().__init__()
+        root = tk.Tk()
+        root.withdraw()
         self.__page_name = "report.html"
         self.__page_content = ""
-        self.__output_directory = "output_report"
+        self.__output_directory = filedialog.askdirectory(title='Wybierz lokalizację zapisu raportu')
         self.__output_file_path = "{}/{}"
 
     def create_report_page(self):
