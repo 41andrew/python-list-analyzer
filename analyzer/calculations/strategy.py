@@ -157,16 +157,18 @@ class EngagementStrategy(CategoryAssignmentStrategy):
             if self.is_input_row_in_capital_group(sample_engagement):
                 print("Engagement is in capital group")
 
-                if self.end_of_calculation_if_row_in_capital_group(input_row.engagements, input_row):
-                    print("Category finally assigned in EngagementStrategy")
+                if input_row.has_any_engagements_with_same_nip():
+                    input_row.category = Category.NOT_ACCEPTED
                 else:
-                    ProposalStrategy().assign_category(input_row)
+                    if self.end_of_calculation_if_row_in_capital_group(input_row.engagements, input_row):
+                        print("Category finally assigned in EngagementStrategy")
+                    else:
+                        ProposalStrategy().assign_category(input_row)
 
             else:
                 print("Engagement is not in capital group")
 
-                if self.end_of_calculation_if_row_not_in_capital_group(input_row.engagements):
-                    print("Category finally assigned in EngagementStrategy")
+                if input_row.has_any_engagements_with_same_nip():
                     input_row.category = Category.NOT_ACCEPTED
                 else:
                     input_row.category = Category.ACCEPTED
