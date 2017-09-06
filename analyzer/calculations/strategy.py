@@ -160,9 +160,12 @@ class EngagementStrategy(CategoryAssignmentStrategy):
                 if input_row.has_any_engagements_with_same_nip():
                     input_row.category = Category.NOT_ACCEPTED
                 else:
-                    if self.end_of_calculation_if_row_in_capital_group(input_row.engagements, input_row):
+                    if input_row.has_any_restricted_engagements_for_na():
+                        input_row.category = Category.TO_CHECK
+                        ProposalStrategy().assign_category(input_row)
                         print("Category finally assigned in EngagementStrategy")
                     else:
+                        input_row.category = Category.ACCEPTED
                         ProposalStrategy().assign_category(input_row)
 
             else:

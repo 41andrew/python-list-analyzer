@@ -21,7 +21,7 @@ class CsvDataLoader:
 
     def __init__(self):
         root = tk.Tk()
-        root.withdraw
+        root.withdraw()
         self.input_files_directory = "source_files"
         self.data_paths = {
             'input_file_source': "{}/input.csv".format(self.input_files_directory),

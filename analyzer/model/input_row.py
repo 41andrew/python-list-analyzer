@@ -35,10 +35,21 @@ class InputRow(BaseRow):
     def __str__(self):
         return "[{0.name}][{0.nip}][{0.category}][{0.company_name_in_crm}]".format(self)
 
+    def has_any_restricted_engagements_for_na(self):
+
+        for engagement in self.engagements:
+            if engagement.entity.nip != self.nip:
+                if engagement.entity.is_restricted():
+                    return True
+                else:
+                    return False
+            else:
+                return False
+
     def has_any_engagements_with_same_nip(self):
 
         for engagement in self.engagements:
-            if engagement[0] == self.nip:
+            if engagement.entity.nip == self.nip:
                 return True
             else:
                 return False

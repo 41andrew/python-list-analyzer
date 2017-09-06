@@ -12,10 +12,11 @@ from analyzer.calculations.strategy import CampaignStrategy
 if __name__ == "__main__":
 
     data_writer = CsvDataWriter()
-    # Opening connection to postgres database
-    pgs_loader = PostGreDataLoader()
     # Opening connection to CRM
     crm_loader = CrmDataLoader()
+    # Opening connection to postgres database
+    pgs_loader = PostGreDataLoader()
+
 
     context = InputRowsCategoryAssignmentContext()
     strategy = CampaignStrategy()
