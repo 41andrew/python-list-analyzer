@@ -159,9 +159,11 @@ class EngagementStrategy(CategoryAssignmentStrategy):
 
                 if input_row.has_any_engagements_with_same_nip():
                     input_row.category = Category.NOT_ACCEPTED
+                    input_row.category_reason = "Są engagementy na danej spółce"
                 else:
                     if input_row.has_any_restricted_engagements_for_na():
                         input_row.category = Category.TO_CHECK
+                        input_row.category_reason = "Są engagementy na spółce z grupy kapitałowej"
                         ProposalStrategy().assign_category(input_row)
                         print("Category finally assigned in EngagementStrategy")
                     else:
@@ -173,6 +175,7 @@ class EngagementStrategy(CategoryAssignmentStrategy):
 
                 if input_row.has_any_engagements_with_same_nip():
                     input_row.category = Category.NOT_ACCEPTED
+                    input_row.category_reason = "Są engagementy na danej spółce"
                 else:
                     input_row.category = Category.ACCEPTED
                     ProposalStrategy().assign_category(input_row)
@@ -191,9 +194,11 @@ class ProposalStrategy(CategoryAssignmentStrategy):
 
         if output_category == 3:
             input_row.category = Category.NOT_ACCEPTED
+            input_row.category_reason = "Są zabronione proposale na danej spółce"
             return True
         elif output_category == 2:
             input_row.category = Category.TO_CHECK
+            input_row.category_reason = "Są zabronione proposale na grupie kapitałowej"
             return True
         elif output_category == 1:
             input_row.category = Category.ACCEPTED
@@ -238,6 +243,7 @@ class BDAStrategy(CategoryAssignmentStrategy):
         if input_row.has_any_bdas():
             print("input_row with NIP [{}] has BDAa".format(input_row.nip))
             input_row.category = Category.TO_CHECK
+            input_row.category_reason = "Są BDA"
         else:
             RelationshipStrategy().assign_category(input_row)
 
@@ -250,6 +256,7 @@ class CampaignStrategy(CategoryAssignmentStrategy):
         if input_row.has_any_campaigns():
             print("input_row with NIP [{}] has campaigns".format(input_row.nip))
             input_row.category = Category.NOT_ACCEPTED
+            input_row.category_reason = "Spółka ma kampanię"
         else:
             RestrictedServicesStrategy().assign_category(input_row)
 
@@ -261,6 +268,7 @@ class RelationshipStrategy(CategoryAssignmentStrategy):
         if input_row.has_any_relationships():
             print("input_row with NIP [{}] has relationships with high status".format(input_row.nip))
             input_row.category = Category.TO_CHECK
+            input_row.category_reason = "Jest relationship high"
         else:
             pass
 
@@ -272,5 +280,6 @@ class RestrictedServicesStrategy(CategoryAssignmentStrategy):
         if input_row.has_any_restricted_services():
             print("input_row with NIP [{}] has restricted services".format(input_row.nip))
             input_row.category = Category.NOT_ACCEPTED
+            input_row.category_reason = "Są restricted services"
         else:
             EngagementStrategy().assign_category(input_row)

@@ -18,7 +18,7 @@ class InputRow(BaseRow):
         relationship(list): list of entity's relationships with status: HIGH
     """
 
-    COLUMN_NAMES = ["NAME", "NIP", "NAME_IN_CRM", "CATEGORY"]
+    COLUMN_NAMES = ["NAME", "NIP", "NAME_IN_CRM", "CATEGORY", "POWÓD ODRZUCENIA"]
 
     def __init__(self, name="", nip="", company_name_in_crm=""):
         self.name = name
@@ -31,6 +31,7 @@ class InputRow(BaseRow):
         self.campaigns = []
         self.relationships = []
         self.restricted_services = []
+        self.category_reason = ""
 
     def __str__(self):
         return "[{0.name}][{0.nip}][{0.category}][{0.company_name_in_crm}]".format(self)
@@ -79,7 +80,7 @@ class InputRow(BaseRow):
         return "{0.name};{0.nip};{0.company_name_in_crm};{0.category}".format(self)
 
     def get_column_values_as_list(self):
-        return [self.name, self.nip, self.company_name_in_crm, self.category]
+        return [self.name, self.nip, self.company_name_in_crm, self.category, self.category_reason]
 
     def get_engagements_column_values(self):
         all_engagements_data = []
