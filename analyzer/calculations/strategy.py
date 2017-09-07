@@ -289,7 +289,7 @@ class SentinelStrategy(CategoryAssignmentStrategy):
     def assign_category(self, input_row):
         print("Checking sentinel")
 
-        if input_row.is_sentinel_restricted:
+        if input_row.is_sentinel_restricted():
             print("Spółka ma zabroniony sentinel")
             input_row.category = Category.NOT_ACCEPTED
             input_row.category_reason = "Sentinel"

@@ -7,6 +7,7 @@ from ..model.bda import BusinessDevelopmentActivities
 from ..model.campaign import Campaign
 from ..model.relationship import Relationship
 from ..model.restricted_services import RestrictedServices
+from ..data_loader.data_loader import CsvDataLoader
 import tkinter as tk
 from tkinter import filedialog
 
@@ -83,7 +84,7 @@ class HtmlReporter(Reporter):
         super().__init__()
         root = tk.Tk()
         root.withdraw()
-        self.__page_name = "report.html"
+        self.__page_name = CsvDataLoader.PAGE_NAME
         self.__page_content = ""
         self.__output_directory = filedialog.askdirectory(title='Wybierz lokalizację zapisu raportu')
         self.__output_file_path = "{}/{}"
@@ -112,6 +113,8 @@ class HtmlReporter(Reporter):
 
     def __build_jumbotron(self):
         self.__page_content += HtmlPageBuilder.open_tag('div', 'jumbotron', 1)
+
+        self.__page_content += """<h1>{}</h1>""".format(self.__page_name)
         self.__page_content += HtmlPageBuilder.add_page_element('p', 'text-center', 3, "Category 0 (not assigned) : {}"
                                                                 .format(self.not_assigned_count))
         self.__page_content += HtmlPageBuilder.add_page_element('p', 'text-center', 3, "Category 1 (accepted) : {}"

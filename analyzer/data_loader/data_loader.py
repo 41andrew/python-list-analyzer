@@ -19,6 +19,8 @@ class CsvDataLoader:
         error_messages(set(list(str)): if data loading gone wrong, error messages will be stored in this set
     """
 
+    PAGE_NAME = ""
+
     def __init__(self):
         root = tk.Tk()
         root.withdraw()
@@ -31,8 +33,13 @@ class CsvDataLoader:
             'input_file_bda': "{}/bda.csv".format(self.input_files_directory)
         }
         self.data_path_input = filedialog.askopenfilename(title='Wybierz plik z danymi do weryfikacji', filetypes=(('csv files', '*.csv'),))
+        self.set_page_name()
         self.input_entities = {}
         self.error_messages = set([])
+
+    def set_page_name(self):
+
+        CsvDataLoader.PAGE_NAME = self.data_path_input
 
     def load_data(self):
         """

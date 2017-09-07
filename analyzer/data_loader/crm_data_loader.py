@@ -84,6 +84,7 @@ class CrmDataLoader:
                         ems.v_Employee em ON eg.EngagementPartner_ID = em.Employee_ID INNER JOIN
                         ems.v_EngagementStatus es ON eg.EngagementStatus_ID = es.EngagementStatus_ID
               WHERE na.NationalAccount = (?) AND (YEAR(eg.CreateDate) >= (?) OR es.Status = 'Active')
+              ORDER BY CreateDate DESC
 				"""
 
         cursor.execute(sql, account, self.engagements_date)
@@ -102,7 +103,8 @@ class CrmDataLoader:
                                     ems.v_CustomList cl ON ea.SentinelCategory_ID = cl.CustomList_ID LEFT JOIN
                                     ems.v_Employee em ON pr.KpmgContact_ID = em.Employee_ID INNER JOIN
                                     ems.v_ProposalStatus ps ON pr.ProposalStatus_ID = ps.ProposalStatus_ID
-                    WHERE na.NationalAccount = (?) AND YEAR(pr.CreateDate) >= (?) AND ps.Status <> 'Sold'"""
+                    WHERE na.NationalAccount = (?) AND YEAR(pr.CreateDate) >= (?) AND ps.Status <> 'Sold'
+                    ORDER BY CreateDate DESC"""
 
         cursor.execute(sql, account, self.proposals_date)
 
@@ -120,7 +122,8 @@ class CrmDataLoader:
                                     ems.v_CustomList cl ON ea.SentinelCategory_ID = cl.CustomList_ID  LEFT JOIN
                                     ems.v_Employee em ON bd.Employee_ID = em.Employee_ID INNER JOIN
                                     ems.v_BDActivityCategory bdc ON bd.BDActivityCategory_ID = bdc.BDActivityCategory_ID
-                    WHERE na.NationalAccount = (?) AND YEAR(bd.ActivityDate) >= (?)"""
+                    WHERE na.NationalAccount = (?) AND YEAR(bd.ActivityDate) >= (?)
+                    ORDER BY ActivityDate DESC"""
 
         cursor.execute(sql, account, self.bd_date)
 
@@ -139,6 +142,7 @@ class CrmDataLoader:
                                 ems.v_Employee em ON eg.EngagementPartner_ID = em.Employee_ID INNER JOIN
                                 ems.v_EngagementStatus es ON eg.EngagementStatus_ID = es.EngagementStatus_ID
                       WHERE en.TaxNumber = (?) AND (YEAR(eg.CreateDate) >= (?) OR es.Status = 'Active')
+                      ORDER BY CreateDate DESC
         				"""
 
         cursor.execute(sql, nip, self.engagements_date)
@@ -156,7 +160,8 @@ class CrmDataLoader:
                                     ems.v_CustomList cl ON ea.SentinelCategory_ID = cl.CustomList_ID LEFT JOIN
                                     ems.v_Employee em ON pr.KpmgContact_ID = em.Employee_ID INNER JOIN
                                     ems.v_ProposalStatus ps ON pr.ProposalStatus_ID = ps.ProposalStatus_ID
-                    WHERE en.TaxNumber = (?) AND YEAR(pr.CreateDate) >= (?) AND ps.Status <> 'Sold'"""
+                    WHERE en.TaxNumber = (?) AND YEAR(pr.CreateDate) >= (?) AND ps.Status <> 'Sold'
+                    ORDER BY CreateDate DESC"""
 
         cursor.execute(sql, nip, self.proposals_date)
         return cursor.fetchall()
@@ -173,7 +178,8 @@ class CrmDataLoader:
                                     ems.v_CustomList cl ON ea.SentinelCategory_ID = cl.CustomList_ID  LEFT JOIN
                                     ems.v_Employee em ON bd.Employee_ID = em.Employee_ID INNER JOIN
                                     ems.v_BDActivityCategory bdc ON bd.BDActivityCategory_ID = bdc.BDActivityCategory_ID
-                    WHERE en.TaxNumber = (?) AND YEAR(bd.ActivityDate) >= (?)"""
+                    WHERE en.TaxNumber = (?) AND YEAR(bd.ActivityDate) >= (?)
+                    ORDER BY ActivityDate DESC"""
 
         cursor.execute(sql, nip, self.bd_date)
         return cursor.fetchall()

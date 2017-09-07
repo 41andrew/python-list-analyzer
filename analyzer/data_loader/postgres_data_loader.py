@@ -6,6 +6,9 @@ from ..model.proposal import Proposal
 from ..model.bda import BusinessDevelopmentActivities
 from ..model.entity import Entity
 from ..model.campaign import Campaign
+import os
+import tkinter as tk
+from tkinter import filedialog
 
 
 class PostGreDataLoader:
@@ -14,18 +17,36 @@ class PostGreDataLoader:
                         20, 21, 23, 24, 27, 28, 29,
                         30, 31, 33, 34, 35, 36, 37,
                         40, 41, 42, 43, 44, 46, 47,
-                        48, 49, 50]
+                        48, 49, 50, 51, 52, 53, 54,
+                        55]
 
     all_campaigns = []
 
     def __init__(self):
+        root = tk.Tk()
+        root.withdraw()
         self.props = PropertiesReader.get_properties_file_as_dict()
         # Tutaj nadpisywales input
         # self.input_from_csv = CsvDataLoader().get_input_rows_as_dict()
         self.input_from_csv = {}
         self.conn = None
+        self.camapign_list_input = filedialog.askopenfilename(title='Wybierz plik kampaniami',
+                                                          filetypes=(('csv files', '*.csv'),))
         self.start_date = input("Podaj datę początkową kampanii w formacie YYYY-MM-DD\n")
         self.end_date = input("Podaj datę końcową kampanii YYYY-MM-DD\n")
+
+    def read_lines_from_campaign_file(self):
+        try:
+            with open(self.camapign_list_input, 'r', encoding='windows-1250', errors='ignore') as source_file:
+                return source_file.readlines()
+        except FileNotFoundError as e:
+            print(e)
+            self.error_messages.add("File {} not found".format(self.camapign_list_input))
+
+    def create_campaign_list(self):
+
+        for line in self.read_lines_from_campaign_file():
+            PostGreDataLoader.CAMPAIGN_ID_LIST.append(line[0])
 
     def set_input_from_csv(self, input_from_crm):
         self.input_from_csv = input_from_crm
