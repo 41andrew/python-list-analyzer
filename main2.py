@@ -7,6 +7,7 @@ from analyzer.data_writer.data_writer import CsvDataWriter
 from analyzer.utilities.properties_reader import PropertiesReader
 from analyzer.calculations.strategy import RestrictedServicesStrategy
 from analyzer.calculations.strategy import CampaignStrategy
+from analyzer.calculations.strategy import SentinelStrategy
 
 
 if __name__ == "__main__":
@@ -19,7 +20,7 @@ if __name__ == "__main__":
 
 
     context = InputRowsCategoryAssignmentContext()
-    strategy = CampaignStrategy()
+    strategy = SentinelStrategy()
 
 
     # Loading data from CRM

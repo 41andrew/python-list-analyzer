@@ -19,8 +19,19 @@ class InputRow(BaseRow):
     """
 
     COLUMN_NAMES = ["NAME", "NIP", "NAME_IN_CRM", "SENTINEL", "CATEGORY", "POWÓD ODRZUCENIA"]
+    RESTRICTED_SENTINEL = [ "audit restricted client - PL Secondary approval",
+                            "audit restricted client - PL SLP assigned",
+                            "audit restricted client - SLP assigned",
+                            "SEC/Audit",
+                            "SEC/Audit client - PL Secondary approval",
+                            "Audit Target -PL Secondary Approval",
+                            "Audit Target/SLP",
+                            "Audit Target -PL SLP",
+                            "Audit Target",
+                            "SEC/ Audit Target"
+                           ]
 
-    def __init__(self, name, nip, company_name_in_crm, sentinel):
+    def __init__(self, name="", nip="", company_name_in_crm="", sentinel=""):
         self.name = name
         self.nip = nip
         self.category = Category.NOT_ASSIGNED
@@ -36,6 +47,10 @@ class InputRow(BaseRow):
 
     def __str__(self):
         return "[{0.name}][{0.nip}][{0.category}][{0.company_name_in_crm}]".format(self)
+
+    def is_sentinel_restricted(self):
+
+        return self.sentinel in InputRow.RESTRICTED_SENTINEL
 
     def has_any_restricted_engagements_for_na(self):
 
