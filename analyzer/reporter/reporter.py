@@ -186,7 +186,7 @@ class HtmlReporter(Reporter):
                                     </div>
                                     <div id="collapse{}" class="panel-collapse collapse">""".format(self.column_id, input_row.nip, input_row.company_name_in_crm, self.column_id))
 
-        self.__page_content += HtmlPageBuilder.add_page_element('h3', 'text-left', 2, 'Entity: {} NIP: {}'.format(input_row.name, input_row.nip))
+        self.__page_content += HtmlPageBuilder.add_page_element('h3', 'text-left', 2, 'Entity: {} NIP: {} Powód odrzucenia: {}'.format(input_row.name, input_row.nip, input_row.category_reason))
 
         self.__build_category_table('Engagements : ', Engagement.COLUMN_NAMES,
                                         input_row.get_engagements_column_values())

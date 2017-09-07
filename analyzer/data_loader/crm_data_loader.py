@@ -102,7 +102,7 @@ class CrmDataLoader:
                                     ems.v_CustomList cl ON ea.SentinelCategory_ID = cl.CustomList_ID LEFT JOIN
                                     ems.v_Employee em ON pr.KpmgContact_ID = em.Employee_ID INNER JOIN
                                     ems.v_ProposalStatus ps ON pr.ProposalStatus_ID = ps.ProposalStatus_ID
-                    WHERE na.NationalAccount = (?) AND YEAR(pr.CreateDate) >= (?)"""
+                    WHERE na.NationalAccount = (?) AND YEAR(pr.CreateDate) >= (?) AND ps.Status <> 'Sold'"""
 
         cursor.execute(sql, account, self.proposals_date)
 
@@ -156,7 +156,7 @@ class CrmDataLoader:
                                     ems.v_CustomList cl ON ea.SentinelCategory_ID = cl.CustomList_ID LEFT JOIN
                                     ems.v_Employee em ON pr.KpmgContact_ID = em.Employee_ID INNER JOIN
                                     ems.v_ProposalStatus ps ON pr.ProposalStatus_ID = ps.ProposalStatus_ID
-                    WHERE en.TaxNumber = (?) AND YEAR(pr.CreateDate) >= (?)"""
+                    WHERE en.TaxNumber = (?) AND YEAR(pr.CreateDate) >= (?) AND ps.Status <> 'Sold'"""
 
         cursor.execute(sql, nip, self.proposals_date)
         return cursor.fetchall()
@@ -220,6 +220,19 @@ class CrmDataLoader:
         cursor.execute(sql, nip)
         return cursor.fetchall()
 
+    def get_crm_sentinel(self, nip):
+
+        cursor = self.conn.cursor()
+
+        sql = """SELECT cl.Description
+                    FROM ems.v_Entity en INNER JOIN
+                            ems.v_EntityAdditional ea ON en.Entity_ID = ea.Entity_ID LEFT JOIN
+                            ems.v_CustomList cl ON ea.SentinelCategory_ID = cl.CustomList_ID
+                    WHERE en.TaxNumber = (?)"""
+
+        cursor.execute(sql, nip)
+        return cursor.fetchone()
+
     def load_data_from_crm2(self):
 
         for nip in self.input_from_csv:
@@ -227,13 +240,16 @@ class CrmDataLoader:
             if self.is_nip_in_crm(nip):
 
                 crm_name_from_db = self.get_crm_name(nip)
+                crm_sentinel = self.get_crm_sentinel(nip)
 
                 self.input_from_csv[nip].company_name_in_crm = crm_name_from_db[0][0]
+                self.input_from_csv[nip].sentinel = crm_sentinel[0]
             else:
                 self.input_from_csv[nip].company_name_in_crm = """<strong><font color="red">BRAK NIPu W CRM</font></strong>"""
 
             grupa = self.find_nationalaccount_for_input_nip(nip)
             is_in_crm = self.is_nip_in_crm(nip)
+
 
 
             relationships_from_db = self.find_relationship(nip)

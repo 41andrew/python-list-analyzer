@@ -17,7 +17,7 @@ class Proposal(BaseRow):
 
     COLUMN_NAMES = ["NIP", "NATIONAL_ACCOUNT", "ENTITY_NAME", "DESCRIPTION", "PROPOSAL_ID", "PROPOSAL_NAME",
                     "PROPOSAL_PARTNER", "CREATE_DATE", "STATUS"]
-    proposal_restricted_status = ["Active", "Sold", "Sent", "New"]
+    proposal_restricted_status = ["Sent", "New", "Rejected", "Opportunity"]
 
     def __init__(self, entity, proposal_id, proposal_name, proposal_partner, create_date, status):
         self.entity = entity

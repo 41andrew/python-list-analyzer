@@ -18,9 +18,9 @@ class InputRow(BaseRow):
         relationship(list): list of entity's relationships with status: HIGH
     """
 
-    COLUMN_NAMES = ["NAME", "NIP", "NAME_IN_CRM", "CATEGORY", "POWÓD ODRZUCENIA"]
+    COLUMN_NAMES = ["NAME", "NIP", "NAME_IN_CRM", "SENTINEL", "CATEGORY", "POWÓD ODRZUCENIA"]
 
-    def __init__(self, name="", nip="", company_name_in_crm=""):
+    def __init__(self, name, nip, company_name_in_crm, sentinel):
         self.name = name
         self.nip = nip
         self.category = Category.NOT_ASSIGNED
@@ -31,6 +31,7 @@ class InputRow(BaseRow):
         self.campaigns = []
         self.relationships = []
         self.restricted_services = []
+        self.sentinel = sentinel
         self.category_reason = ""
 
     def __str__(self):
@@ -42,18 +43,14 @@ class InputRow(BaseRow):
             if engagement.entity.nip != self.nip:
                 if engagement.entity.is_restricted():
                     return True
-                else:
-                    return False
-            else:
-                return False
+        return False
 
     def has_any_engagements_with_same_nip(self):
 
         for engagement in self.engagements:
             if engagement.entity.nip == self.nip:
                 return True
-            else:
-                return False
+        return False
 
     def has_any_engagements(self):
         return len(self.engagements) != 0
@@ -80,7 +77,7 @@ class InputRow(BaseRow):
         return "{0.name};{0.nip};{0.company_name_in_crm};{0.category}".format(self)
 
     def get_column_values_as_list(self):
-        return [self.name, self.nip, self.company_name_in_crm, self.category, self.category_reason]
+        return [self.name, self.nip, self.company_name_in_crm, self.sentinel, self.category, self.category_reason]
 
     def get_engagements_column_values(self):
         all_engagements_data = []
