@@ -56,7 +56,7 @@ class InputRow(BaseRow):
 
         for engagement in self.engagements:
             if engagement.entity.nip != self.nip:
-                if engagement.entity.is_restricted():
+                if engagement.entity.is_restricted() or engagement.is_active():
                     return True
         return False
 

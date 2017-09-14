@@ -6,6 +6,7 @@ from ..model.entity import Entity
 import os
 import tkinter as tk
 from tkinter import filedialog
+from tkinter import tkSimpleDialog
 
 
 class CsvDataLoader:
@@ -33,7 +34,7 @@ class CsvDataLoader:
             'input_file_bda': "{}/bda.csv".format(self.input_files_directory)
         }
         self.data_path_input = filedialog.askopenfilename(title='Wybierz plik z danymi do weryfikacji', filetypes=(('csv files', '*.csv'),))
-        self.set_page_name()
+        #self.set_page_name()
         self.input_entities = {}
         self.error_messages = set([])
 

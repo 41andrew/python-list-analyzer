@@ -84,7 +84,7 @@ class HtmlReporter(Reporter):
         super().__init__()
         root = tk.Tk()
         root.withdraw()
-        self.__page_name = CsvDataLoader.PAGE_NAME
+        self.__page_name = "report.html"
         self.__page_content = ""
         self.__output_directory = filedialog.askdirectory(title='Wybierz lokalizację zapisu raportu')
         self.__output_file_path = "{}/{}"
