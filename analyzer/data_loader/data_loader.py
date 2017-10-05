@@ -153,7 +153,7 @@ class CsvDataLoader:
         # TODO implement this method
         pass
 
-    def _parse_object_from_semicolon_separated_line(self, line, file_path_key_in_dict):
+    def  _parse_object_from_semicolon_separated_line(self, line, file_path_key_in_dict):
         """
         Based on file_path_key_in_dict, different type of object is created
 

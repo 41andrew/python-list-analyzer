@@ -13,12 +13,7 @@ from tkinter import filedialog
 
 class PostGreDataLoader:
 
-    CAMPAIGN_ID_LIST = [16, 17, 18, 19,
-                        20, 21, 23, 24, 27, 28, 29,
-                        30, 31, 33, 34, 35, 36, 37,
-                        40, 41, 42, 43, 44, 46, 47,
-                        48, 49, 50, 51, 52, 53, 54,
-                        55]
+    CAMPAIGN_ID_LIST = []
 
     all_campaigns = []
 
@@ -32,6 +27,7 @@ class PostGreDataLoader:
         self.conn = None
         self.camapign_list_input = filedialog.askopenfilename(title='Wybierz plik kampaniami',
                                                           filetypes=(('csv files', '*.csv'),))
+        self.create_campaign_list()
         self.start_date = input("Podaj datę początkową kampanii w formacie YYYY-MM-DD\n")
         self.end_date = input("Podaj datę końcową kampanii YYYY-MM-DD\n")
 
@@ -46,6 +42,7 @@ class PostGreDataLoader:
     def create_campaign_list(self):
 
         for line in self.read_lines_from_campaign_file():
+            line = line.strip('\n').split(sep=';')
             PostGreDataLoader.CAMPAIGN_ID_LIST.append(line[0])
 
     def set_input_from_csv(self, input_from_crm):

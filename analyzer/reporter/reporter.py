@@ -114,7 +114,7 @@ class HtmlReporter(Reporter):
     def __build_jumbotron(self):
         self.__page_content += HtmlPageBuilder.open_tag('div', 'jumbotron', 1)
 
-        self.__page_content += """<h1>{}</h1>""".format(self.__page_name)
+        #self.__page_content += """<h1>{}</h1>""".format(self.__page_name)
         self.__page_content += HtmlPageBuilder.add_page_element('p', 'text-center', 3, "Category 0 (not assigned) : {}"
                                                                 .format(self.not_assigned_count))
         self.__page_content += HtmlPageBuilder.add_page_element('p', 'text-center', 3, "Category 1 (accepted) : {}"
@@ -140,15 +140,6 @@ class HtmlReporter(Reporter):
         self.__page_content += HtmlPageBuilder.close_tag('div', 2)
 
     def __build_detailed_data_about_rows_which_need_to_be_checked(self):
-        self.__page_content += HtmlPageBuilder.add_page_element('h2', 'text-center', 2,
-                                                                'Details about entities in category 0')
-
-        self.__page_content += """<div class="panel-group" id="accordion">"""
-
-        for row in self._get_input_rows_with_given_category(Category.NOT_ASSIGNED, self.input_rows):
-            self.__build_detailed_data_about_one_row_and_its_collections(row)
-
-        self.__page_content += """</div>"""
 
         self.__page_content += HtmlPageBuilder.add_page_element('h2', 'text-center', 2,
                                                                 'Details about entities in category 1')

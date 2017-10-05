@@ -5,7 +5,7 @@ class Campaign(BaseRow):
 
     COLUMN_NAMES = ["CAMPAIGN_ID", "CAMPAIGN_NAME", "NIP", "NAME", "LAST_CALL", "LAST_COMMENT"]
 
-    def __init__(self, campaign_id, campaign_name, nip, name, last_call, last_comment):
+    def __init__(self, campaign_id, campaign_name, nip, name, last_call, last_comment=""):
         super().__init__()
         self.campaign_id = campaign_id
         self.campaign_name = campaign_name

@@ -201,7 +201,8 @@ class ProposalStrategy(CategoryAssignmentStrategy):
             input_row.category_reason = "Są zabronione proposale na grupie kapitałowej"
             return True
         elif output_category == 1:
-            input_row.category = Category.ACCEPTED
+            if input_row.category == Category.NOT_ASSIGNED:
+                input_row.category = Category.ACCEPTED
             return False
 
     def assign_category(self, input_row):
