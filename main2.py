@@ -8,9 +8,15 @@ from analyzer.utilities.properties_reader import PropertiesReader
 from analyzer.calculations.strategy import RestrictedServicesStrategy
 from analyzer.calculations.strategy import CampaignStrategy
 from analyzer.calculations.strategy import SentinelStrategy
+import tkinter
 
 
 if __name__ == "__main__":
+
+    top = tkinter.Tk()
+    top.title("Weryfikacja list CRM")
+    top.geometry("500x700")
+    top.mainloop()
 
     data_writer = CsvDataWriter()
     # Opening connection to CRM
